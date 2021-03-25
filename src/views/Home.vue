@@ -1,6 +1,10 @@
 <template>
   <div class="home">
     <ion-grid>
+      <ion-row class="add-task-button">
+        <ion-button color="primary" @click="showModal">Add task</ion-button>
+        <Modal v-show="isModalVisible" @close="closeModal" />
+      </ion-row>
       <ion-row>
         <ion-col size="12" size-md v-for="column in columns" :key="column.key">
           <h1>{{ column.key }}</h1>
@@ -9,7 +13,7 @@
             group="tasks"
             item-key="_id"
             class="column"
-            @change="onUnpublishedChange($event, column.key)"
+            @change="updateStatus($event, column.key)"
           >
             <template #item="{element}">
               <Task :entity="element" />
@@ -22,12 +26,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted } from "vue";
+import { defineComponent, computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import draggable from "vuedraggable";
 // import { columns as defaultColumns } from "@/mock/tasks";
 import Task from "@/components/Task.vue";
-import { IonCol, IonGrid, IonRow } from "@ionic/vue";
+import { IonCol, IonGrid, IonRow, IonButton } from "@ionic/vue";
+import Modal from "@/components/AddTaskModal.vue";
 
 export default defineComponent({
   components: {
@@ -35,25 +40,38 @@ export default defineComponent({
     Task,
     IonCol,
     IonGrid,
-    IonRow
+    IonRow,
+    Modal,
+    IonButton
   },
   setup() {
     const store = useStore();
+    const isModalVisible = ref(false);
     onMounted(() => {
       store.dispatch("fetchTasks");
     });
 
     const columns = computed(() => store.getters.getTasks);
 
-    const onUnpublishedChange = ({ added }: any, status: string) => {
+    const updateStatus = ({ added }: any, status: string) => {
       if (added) {
-        store.dispatch("updateTask", { id: added.element._id, status });
+        store.dispatch("updateTaskStatusAction", { id: added.element._id, status });
       }
+    };
+
+    const showModal = () => {
+      isModalVisible.value = true;
+    };
+    const closeModal = () => {
+      isModalVisible.value = false;
     };
 
     return {
       columns,
-      onUnpublishedChange
+      updateStatus,
+      isModalVisible,
+      showModal,
+      closeModal
     };
   }
 });
@@ -61,5 +79,10 @@ export default defineComponent({
 <style scoped>
 .column {
   height: 100%;
+}
+.add-task-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 2rem;
 }
 </style>

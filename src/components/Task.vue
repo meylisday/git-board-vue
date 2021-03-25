@@ -1,8 +1,25 @@
 <template>
   <div class="width">
+    <Modal v-show="isModalVisible" @close="closeModal" :task="entity" />
     <ion-card>
-      <ion-card-header>
+      <ion-card-header class="flex">
         <ion-card-title>{{ entity.title }}</ion-card-title>
+        <div>
+          <ion-icon
+            @click="updateTask"
+            :icon="create"
+            size="large"
+            class="action-icon"
+            color="primary"
+          />
+          <ion-icon
+            @click="deleteTask(entity._id)"
+            name="close"
+            size="large"
+            class="action-icon"
+            color="danger"
+          ></ion-icon>
+        </div>
       </ion-card-header>
 
       <ion-card-content>
@@ -18,21 +35,48 @@ import {
   IonCard,
   IonCardContent,
   IonCardTitle,
-  IonCardHeader
+  IonCardHeader,
+  IonIcon
 } from "@ionic/vue";
-import { warning } from "ionicons/icons";
-import { defineComponent } from "vue";
-
+import { create } from "ionicons/icons";
+import { defineComponent, ref } from "vue";
+import { useStore } from "vuex";
+import Modal from "@/components/AddTaskModal.vue";
 export default defineComponent({
   props: ["entity"],
   components: {
     IonCard,
     IonCardContent,
     IonCardTitle,
-    IonCardHeader
+    IonCardHeader,
+    IonIcon,
+    Modal
   },
-  setup() {
-    return { warning };
+  setup(props, { emit }) {
+    const store = useStore();
+    const isModalVisible = ref(false);
+    const showModal = () => {
+      isModalVisible.value = true;
+    };
+    const updateTask = () => {
+      showModal();
+    };
+    const closeModal = () => {
+      isModalVisible.value = false;
+    };
+    const deleteTask = async (id: string) => {
+      await store.dispatch("deleteTaskAction", id);
+      await store.dispatch("fetchTasks");
+      emit("close");
+    };
+    return {
+      create,
+      updateTask,
+      showModal,
+      closeModal,
+      isModalVisible,
+      deleteTask
+    };
   }
 });
 </script>
@@ -40,5 +84,12 @@ export default defineComponent({
 <style scoped>
 .width {
   width: 20rem;
+}
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+.action-icon {
+  cursor: pointer;
 }
 </style>
