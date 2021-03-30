@@ -1,33 +1,31 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view />
+  <ion-app class="app">
+    <Header />
+    <div class="router-wrapper">
+      <ion-router-outlet />
+    </div>
+  </ion-app>
 </template>
 
-<style lang="scss">
-body {
-  overflow: auto;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<script>
+import { IonApp, IonRouterOutlet } from "@ionic/vue";
+import { defineComponent } from "vue";
+import Header from "@/components/Header.vue";
+export default defineComponent({
+  name: "App",
+  components: {
+    IonApp,
+    IonRouterOutlet,
+    Header
   }
+});
+</script>
+<style scoped>
+.router-wrapper {
+  position: relative;
+  height: 100%;
+}
+.app {
+  padding: 1rem;
 }
 </style>

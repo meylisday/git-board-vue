@@ -1,8 +1,14 @@
 <template>
-  <div class="home">
+  <ion-page>
+    <ion-button
+      expand="expand"
+      color="primary"
+      class="show-modal-button"
+      @click="showModal"
+      >Add task</ion-button
+    >
     <ion-grid>
       <ion-row class="add-task-button">
-        <ion-button color="primary" @click="showModal">Add task</ion-button>
         <Modal v-show="isModalVisible" @close="closeModal" />
       </ion-row>
       <ion-row>
@@ -22,7 +28,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  </div>
+  </ion-page>
 </template>
 
 <script lang="ts">
@@ -31,7 +37,7 @@ import { useStore } from "vuex";
 import draggable from "vuedraggable";
 // import { columns as defaultColumns } from "@/mock/tasks";
 import Task from "@/components/Task.vue";
-import { IonCol, IonGrid, IonRow, IonButton } from "@ionic/vue";
+import { IonCol, IonGrid, IonRow, IonButton, IonPage } from "@ionic/vue";
 import Modal from "@/components/AddTaskModal.vue";
 
 export default defineComponent({
@@ -42,7 +48,8 @@ export default defineComponent({
     IonGrid,
     IonRow,
     Modal,
-    IonButton
+    IonButton,
+    IonPage
   },
   setup() {
     const store = useStore();
@@ -55,7 +62,10 @@ export default defineComponent({
 
     const updateStatus = ({ added }: any, status: string) => {
       if (added) {
-        store.dispatch("updateTaskStatusAction", { id: added.element._id, status });
+        store.dispatch("updateTaskStatusAction", {
+          id: added.element._id,
+          status
+        });
       }
     };
 
@@ -84,5 +94,8 @@ export default defineComponent({
   display: flex;
   justify-content: flex-end;
   margin-right: 2rem;
+}
+.show-modal-button {
+  width: 100px;
 }
 </style>
