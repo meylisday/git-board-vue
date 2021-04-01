@@ -80,7 +80,7 @@ import {
 import { defineComponent, computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 export default defineComponent({
-  props: ["task"],
+  props: ["task", "projectId"],
   components: {
     IonInput,
     IonItem,
@@ -99,14 +99,16 @@ export default defineComponent({
     const close = () => {
       emit("close");
     };
-
     const addTask = async () => {
       if (selectedOption.value && title.value) {
         await store.dispatch("createTaskAction", {
-          title: title.value,
-          status: selectedOption.value
+          projectId: props.projectId,
+          task: {
+            title: title.value,
+            status: selectedOption.value
+          }
         });
-        await store.dispatch("fetchTasks");
+        await store.dispatch("fetchTasks", props.projectId);
         emit("close");
       }
     };
@@ -114,11 +116,15 @@ export default defineComponent({
     const updateTask = async () => {
       if (selectedOption.value && title.value) {
         await store.dispatch("updateTaskAction", {
-          ...props.task,
-          title: title.value,
-          status: selectedOption.value
+          projectId: props.projectId,
+          taskId: props.task._id,
+          task: {
+            ...props.task,
+            title: title.value,
+            status: selectedOption.value
+          }
         });
-        await store.dispatch("fetchTasks");
+        await store.dispatch("fetchTasks", props.projectId);
         emit("close");
       }
     };
@@ -178,7 +184,7 @@ export default defineComponent({
 .modal-body {
   position: relative;
   padding: 2rem;
-  width: 250px;
+  width: 350px;
 }
 
 .btn-close {

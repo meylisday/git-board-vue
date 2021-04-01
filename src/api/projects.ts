@@ -12,6 +12,6 @@ const getAllProjects = () => httpClient.get(PROJECTS);
 
 // const createTask = (task: any) => httpClient.post(TASKS, task);
 
-// const deleteTask = (id: string) => httpClient.delete(`${TASKS}/${id}`);
+const deleteProject = (id: string) => httpClient.delete(`${PROJECTS}/${id}`);
 
-export { getAllProjects };
+export { getAllProjects, deleteProject };

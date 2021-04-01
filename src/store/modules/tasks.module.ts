@@ -25,13 +25,16 @@ const getters = {
 };
 
 const actions = {
-  async fetchTasks({ commit }: ActionContext<State, RootState>) {
+  async fetchTasks(
+    { commit }: ActionContext<State, RootState>,
+    projectId: string
+  ) {
     try {
-      const response = await getAllTasks();
+      const response = await getAllTasks(projectId);
 
       const tasks = ["backlog", "todo", "review", "done"].map(key => ({
         key,
-        items: groupBy(response.data, "status")[key] || []
+        items: groupBy(response.data.tasks, "status")[key] || []
       }));
       commit("setTasks", tasks);
     } catch (error) {
@@ -46,21 +49,22 @@ const actions = {
   },
   async createTaskAction(
     { commit }: ActionContext<State, RootState>,
-    task: any
+    payload: any
   ) {
-    await createTask(task);
+    console.log(payload);
+    await createTask(payload.projectId, payload.task);
   },
   async updateTaskAction(
     { commit }: ActionContext<State, RootState>,
     payload: any
   ) {
-    await updateTask(payload._id, payload);
+    await updateTask(payload.projectId, payload.taskId, payload.task);
   },
   async deleteTaskAction(
     { commit }: ActionContext<State, RootState>,
-    id: string
+    payload: any
   ) {
-    await deleteTask(id);
+    await deleteTask(payload.projectId, payload.taskId);
   }
 };
 

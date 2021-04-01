@@ -1,7 +1,9 @@
 <template>
   <nav class="header">
-    <ion-button router-link="/">Home</ion-button>
-    <ion-button router-link="/projects">Go to detail</ion-button>
+    <ion-button router-link="/" routerDirection="root">Home</ion-button>
+    <ion-button router-link="/projects" routerDirection="root">
+      Go to detail</ion-button
+    >
   </nav>
 </template>
 

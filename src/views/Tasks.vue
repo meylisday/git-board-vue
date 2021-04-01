@@ -1,46 +1,58 @@
 <template>
-  <ion-page>
-    <ion-button
-      expand="expand"
-      color="primary"
-      class="show-modal-button"
-      @click="showModal"
-      >Add task</ion-button
-    >
-    <ion-grid>
-      <ion-row class="add-task-button">
-        <Modal v-show="isModalVisible" @close="closeModal" />
-      </ion-row>
-      <ion-row>
-        <ion-col size="12" size-md v-for="column in columns" :key="column.key">
-          <h1>{{ column.key }}</h1>
-          <draggable
-            v-model="column.items"
-            group="tasks"
-            item-key="_id"
+    <ion-page>
+        <ion-content>
+      <ion-button
+        expand="expand"
+        color="primary"
+        class="show-modal-button"
+        @click="showModal"
+        >Add task</ion-button
+      >
+      <ion-grid class="width column">
+        <ion-row class="add-task-button">
+          <Modal
+            v-show="isModalVisible"
+            @close="closeModal"
+            :projectId="projectId"
+          />
+        </ion-row>
+        <ion-row class="column">
+          <ion-col
+            size="12"
             class="column"
-            @change="updateStatus($event, column.key)"
+            size-md
+            v-for="column in columns"
+            :key="column.key"
           >
-            <template #item="{element}">
-              <Task :entity="element" />
-            </template>
-          </draggable>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-page>
+            <h1>{{ column.key }}</h1>
+            <draggable
+              v-model="column.items"
+              group="tasks"
+              item-key="_id"
+              class="column overflow"
+              @change="updateStatus($event, column.key)"
+            >
+              <template #item="{element}">
+                <Task :entity="element" :projectId="projectId" />
+              </template>
+            </draggable>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+        </ion-content>
+    </ion-page>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import draggable from "vuedraggable";
-// import { columns as defaultColumns } from "@/mock/tasks";
 import Task from "@/components/Task.vue";
 import { IonCol, IonGrid, IonRow, IonButton, IonPage } from "@ionic/vue";
 import Modal from "@/components/AddTaskModal.vue";
 
 export default defineComponent({
+  props: ["projectId"], //projectId
   components: {
     draggable,
     Task,
@@ -51,11 +63,12 @@ export default defineComponent({
     IonButton,
     IonPage
   },
-  setup() {
+  setup(props) {
     const store = useStore();
     const isModalVisible = ref(false);
+
     onMounted(() => {
-      store.dispatch("fetchTasks");
+      store.dispatch("fetchTasks", props.projectId);
     });
 
     const columns = computed(() => store.getters.getTasks);
@@ -97,5 +110,14 @@ export default defineComponent({
 }
 .show-modal-button {
   width: 100px;
+}
+.modal-backdrop {
+  background-color: transparent;
+}
+.width {
+  width: 100%;
+}
+.overflow {
+  /* overflow: auto; */
 }
 </style>

@@ -1,6 +1,11 @@
 <template>
   <div class="width">
-    <Modal v-show="isModalVisible" @close="closeModal" :task="entity" />
+    <Modal
+      v-show="isModalVisible"
+      @close="closeModal"
+      :task="entity"
+      :projectId="projectId"
+    />
     <ion-card>
       <ion-card-header class="flex">
         <ion-card-title>{{ entity.title }}</ion-card-title>
@@ -43,7 +48,7 @@ import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import Modal from "@/components/AddTaskModal.vue";
 export default defineComponent({
-  props: ["entity"],
+  props: ["entity", "projectId"],
   components: {
     IonCard,
     IonCardContent,
@@ -65,8 +70,11 @@ export default defineComponent({
       isModalVisible.value = false;
     };
     const deleteTask = async (id: string) => {
-      await store.dispatch("deleteTaskAction", id);
-      await store.dispatch("fetchTasks");
+      await store.dispatch("deleteTaskAction", {
+        projectId: props.projectId,
+        taskId: id
+      });
+      await store.dispatch("fetchTasks", props.projectId);
       emit("close");
     };
     return {
@@ -91,5 +99,8 @@ export default defineComponent({
 }
 .action-icon {
   cursor: pointer;
+}
+.modal-backdrop {
+  background-color: transparent;
 }
 </style>

@@ -1,6 +1,6 @@
 // import the api endpoints
 import { ActionContext } from "vuex";
-import { getAllProjects } from "../../api/projects";
+import { getAllProjects, deleteProject } from "../../api/projects";
 import { RootState } from "../types";
 
 type State = {
@@ -25,6 +25,12 @@ const actions = {
     } catch (error) {
       // handle the error here
     }
+  },
+  async deleteProjectAction(
+    { commit }: ActionContext<State, RootState>,
+    id: string
+  ) {
+    await deleteProject(id);
   }
 };
 

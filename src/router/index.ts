@@ -2,17 +2,18 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 
 import { RouteRecordRaw } from "vue-router";
 
-import Home from "../views/Home.vue";
+import Tasks from "../views/Tasks.vue";
 import Projects from "../views/Projects.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/",
+    path: "/project/:projectId",
     name: "Home",
-    component: Home
+    component: Tasks,
+    props: true
   },
   {
-    path: "/projects",
+    path: "/",
     name: "Projects",
     component: Projects
   }

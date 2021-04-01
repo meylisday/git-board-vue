@@ -22,7 +22,6 @@ import {
   IonCardContent,
   IonCardTitle,
   IonCardHeader,
-  IonButton,
   popoverController,
   IonIcon
 } from "@ionic/vue";
@@ -38,8 +37,6 @@ export default defineComponent({
     IonCardHeader,
     IonCardContent,
     IonIcon
-    // IonPopover,
-    // Popover
   },
   setup(props, { emit }) {
     const store = useStore();
@@ -48,20 +45,20 @@ export default defineComponent({
         component: Popover,
         cssClass: "my-custom-class",
         event: ev,
-        translucent: true
+        translucent: true,
+        componentProps: {
+          project: props.project,
+          onClick: () => {
+            popover.dismiss();
+          }
+        }
       });
       return popover.present();
     };
-
     return {
       create,
       openPopover,
       menu
-      // updateTask,
-      // showModal,
-      // closeModal,
-      // isModalVisible,
-      // deleteTask
     };
   }
 });
