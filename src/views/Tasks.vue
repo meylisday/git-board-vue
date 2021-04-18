@@ -1,13 +1,16 @@
 <template>
-    <ion-page>
-        <ion-content>
-      <ion-button
-        expand="expand"
-        color="primary"
-        class="show-modal-button"
-        @click="showModal"
-        >Add task</ion-button
-      >
+  <ion-page>
+    <Header />
+    <ion-content>
+      <div class="text-alignt-end">
+        <ion-button
+          expand="expand"
+          color="primary"
+          class="show-modal-button"
+          @click="showModal"
+          >Add task</ion-button
+        >
+      </div>
       <ion-grid class="width column">
         <ion-row class="add-task-button">
           <Modal
@@ -24,7 +27,7 @@
             v-for="column in columns"
             :key="column.key"
           >
-            <h1>{{ column.key }}</h1>
+            <h1 class="text-centered">{{ column.key }}</h1>
             <draggable
               v-model="column.items"
               group="tasks"
@@ -39,20 +42,28 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-        </ion-content>
-    </ion-page>
+    </ion-content>
+  </ion-page>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
+import Header from "@/components/Header.vue";
 import draggable from "vuedraggable";
 import Task from "@/components/Task.vue";
-import { IonCol, IonGrid, IonRow, IonButton, IonPage } from "@ionic/vue";
+import {
+  IonCol,
+  IonGrid,
+  IonRow,
+  IonButton,
+  IonPage,
+  IonContent
+} from "@ionic/vue";
 import Modal from "@/components/AddTaskModal.vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
-  props: ["projectId"], //projectId
   components: {
     draggable,
     Task,
@@ -61,14 +72,18 @@ export default defineComponent({
     IonRow,
     Modal,
     IonButton,
-    IonPage
+    IonPage,
+    IonContent,
+    Header
   },
   setup(props) {
     const store = useStore();
     const isModalVisible = ref(false);
+    const route = useRoute();
+    const { projectId } = route.params;
 
     onMounted(() => {
-      store.dispatch("fetchTasks", props.projectId);
+      store.dispatch("fetchTasks", projectId);
     });
 
     const columns = computed(() => store.getters.getTasks);
@@ -76,7 +91,8 @@ export default defineComponent({
     const updateStatus = ({ added }: any, status: string) => {
       if (added) {
         store.dispatch("updateTaskStatusAction", {
-          id: added.element._id,
+          projectId: projectId,
+          taskId: added.element._id,
           status
         });
       }
@@ -94,7 +110,8 @@ export default defineComponent({
       updateStatus,
       isModalVisible,
       showModal,
-      closeModal
+      closeModal,
+      projectId
     };
   }
 });
@@ -117,7 +134,14 @@ export default defineComponent({
 .width {
   width: 100%;
 }
-.overflow {
-  /* overflow: auto; */
+.text-centered {
+  text-align: center;
+  text-transform: capitalize;
+}
+.text-alignt-end {
+  text-align: right;
+}
+.ion-page {
+  justify-content: unset;
 }
 </style>

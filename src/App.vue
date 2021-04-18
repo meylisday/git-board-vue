@@ -1,6 +1,5 @@
 <template>
   <ion-app class="app">
-    <Header />
     <div class="router-wrapper">
       <ion-router-outlet />
     </div>
@@ -10,13 +9,11 @@
 <script>
 import { IonApp, IonRouterOutlet } from "@ionic/vue";
 import { defineComponent } from "vue";
-import Header from "@/components/Header.vue";
 export default defineComponent({
   name: "App",
   components: {
     IonApp,
-    IonRouterOutlet,
-    Header
+    IonRouterOutlet
   }
 });
 </script>

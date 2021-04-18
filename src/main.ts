@@ -6,6 +6,10 @@ import store from "./store";
 
 import { IonicVue } from "@ionic/vue";
 
+import { domain, clientId } from "../auth_config.json";
+
+import { Auth0Plugin } from "./plugins/auth0-vue";
+
 import "@/assets/custom.css";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/vue/css/core.css";
@@ -31,6 +35,17 @@ const getConfig = () => {
 };
 
 const app = createApp(App)
+  .use(Auth0Plugin, {
+    domain,
+    clientId,
+    onRedirectCallback: (appState: any) => {
+      router.push(
+        appState && appState.targetUrl
+          ? appState.targetUrl
+          : window.location.pathname
+      );
+    }
+  })
   .use(IonicVue)
   .use(store)
   .use(router);

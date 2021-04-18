@@ -1,5 +1,6 @@
 <template>
   <ion-page>
+    <Header />
     <div class="home">
       <Project
         class="width"
@@ -15,13 +16,15 @@
 import { defineComponent, computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { IonPage } from "@ionic/vue";
+import Header from "@/components/Header.vue";
 
 import Project from "@/components/Project.vue";
 
 export default defineComponent({
   components: {
     Project,
-    IonPage
+    IonPage,
+    Header
   },
   setup() {
     const store = useStore();
@@ -52,5 +55,8 @@ export default defineComponent({
   display: flex;
   justify-content: flex-end;
   margin-right: 2rem;
+}
+.ion-page {
+  justify-content: unset;
 }
 </style>

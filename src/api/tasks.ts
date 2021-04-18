@@ -9,8 +9,8 @@ const getAllTasks = (projectId: string) =>
 const updateTask = (projectId: string, taskId: string, task: any) =>
   httpClient.put(`${PROJECT}/${projectId}/task/${taskId}`, task);
 
-const updateTaskStatus = (id: string, status: string) =>
-  httpClient.put(`${TASKS}/${id}/status`, { status });
+const updateTaskStatus = (projectId: string, taskId: string, status: string) =>
+  httpClient.put(`${PROJECT}/${projectId}/task/${taskId}/status`, { status });
 
 const createTask = (projectId: string, task: any) =>
   httpClient.post(`${PROJECT}/${projectId}/task`, task);

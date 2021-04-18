@@ -45,13 +45,12 @@ const actions = {
     { commit }: ActionContext<State, RootState>,
     payload: any
   ) {
-    await updateTaskStatus(payload.id, payload.status);
+    await updateTaskStatus(payload.projectId, payload.taskId, payload.status);
   },
   async createTaskAction(
     { commit }: ActionContext<State, RootState>,
     payload: any
   ) {
-    console.log(payload);
     await createTask(payload.projectId, payload.task);
   },
   async updateTaskAction(
