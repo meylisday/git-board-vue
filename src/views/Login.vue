@@ -1,21 +1,29 @@
 <template>
-  <ion-page>
-    {{ auth.loading }}
-    <!-- Check that the SDK client is not currently loading before accessing is methods -->
+  <ion-page class="login-page">
     <div v-if="!auth.loading">
-      <!-- show login when not authenticated -->
-      <button v-if="!auth.isAuthenticated" @click="login">Log in</button>
+      <ion-card class="login-card">
+        <ion-img
+          class="login-img"
+          src="https://cdn.dribbble.com/users/1089308/screenshots/15534103/media/c2e564a95919b41d51ca3d7ec4eb7a86.jpg"
+        ></ion-img>
+        <ion-card-content>
+          <ion-button v-if="!auth.isAuthenticated" @click="login">
+            Log in
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
     </div>
   </ion-page>
 </template>
 <script lang="ts">
 import { VueAuth } from "@/auth";
 import { defineComponent, inject } from "vue";
-import { IonPage } from "@ionic/vue";
+import { IonPage, IonButton } from "@ionic/vue";
 
 export default defineComponent({
   components: {
-    IonPage
+    IonPage,
+    IonButton
   },
   setup() {
     const auth = inject<VueAuth>("auth");
@@ -33,3 +41,18 @@ export default defineComponent({
   }
 });
 </script>
+<style scoped>
+.login-card {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+</style>
