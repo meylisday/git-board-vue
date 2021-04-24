@@ -1,4 +1,3 @@
-
 import createAuth0Client, {
   PopupLoginOptions,
   Auth0Client,
@@ -21,6 +20,7 @@ export type Auth0Options = {
 export type RedirectCallback = (appState: unknown) => void;
 
 export class VueAuth {
+  accessToken?: string;
   loading = true;
   isAuthenticated? = false;
   user?: User;
@@ -84,6 +84,7 @@ export class VueAuth {
       // Create a new instance of the SDK client using members of the given options object
       this.auth0Client = await createAuth0Client({
         domain: auth0Options.domain,
+        // audience: auth0Options.audience,
         client_id: auth0Options.clientId, // eslint-disable-line @typescript-eslint/camelcase
         redirect_uri: redirectUri // eslint-disable-line @typescript-eslint/camelcase
       });
@@ -110,9 +111,11 @@ export class VueAuth {
     } finally {
       // Initialize our internal authentication state when the page is reloaded
       this.isAuthenticated = await this.auth0Client?.isAuthenticated();
-      this.user = await this.getUser();
+      if (this.isAuthenticated) {
+        this.user = await this.getUser();
+        this.accessToken = await this.auth0Client?.getTokenSilently();
+      }
       this.loading = false;
-      console.log(this.user);
     }
   }
 }

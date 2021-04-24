@@ -21,7 +21,7 @@ export default defineComponent({
   name: "Popover",
   props: ["project", "onClick"],
   components: { IonContent, IonLabel, IonItem, IonList },
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore();
     const deleteProject = async (id: string) => {
       await store.dispatch("deleteProjectAction", id);
