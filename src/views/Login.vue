@@ -8,7 +8,7 @@
         ></ion-img>
         <ion-card-content>
           <ion-button v-if="!auth.isAuthenticated" @click="login">
-            Log in
+            Log with auth0
           </ion-button>
         </ion-card-content>
       </ion-card>
@@ -27,8 +27,6 @@ export default defineComponent({
   },
   setup() {
     const auth = inject<VueAuth>("auth");
-
-    console.log(auth);
 
     const login = () => {
       auth?.loginWithRedirect();

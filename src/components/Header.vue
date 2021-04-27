@@ -38,7 +38,6 @@ export default defineComponent({
     onMounted(async () => {
       const result = await fetch("http://localhost:3000/api/user");
       const data = await result.json();
-      console.log(data);
     });
 
     const openPopover = async (ev: Event) => {
@@ -46,7 +45,12 @@ export default defineComponent({
         component: Popover,
         cssClass: "my-custom-class",
         event: ev,
-        translucent: true
+        translucent: true,
+        componentProps: {
+          onClick: () => {
+            popover.dismiss();
+          }
+        }
       });
       return popover.present();
     };

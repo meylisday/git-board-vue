@@ -4,6 +4,7 @@ import { RouteRecordRaw } from "vue-router";
 
 import Tasks from "../views/Tasks.vue";
 import Projects from "../views/Projects.vue";
+import Profile from "../views/Profile.vue";
 import SignIn from "../views/Login.vue";
 import { authLoginGuard } from "@/auth/authLoginGuard";
 import { authGuard } from "@/auth/authGuard";
@@ -26,6 +27,12 @@ const routes: Array<RouteRecordRaw> = [
     name: "SignIn",
     component: SignIn,
     beforeEnter: authLoginGuard
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
+    beforeEnter: authGuard
   }
 ];
 

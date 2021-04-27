@@ -1,6 +1,9 @@
 <template>
   <ion-content class="ion-padding">
     <ion-list lines="none">
+      <ion-item @click="closePopover" button router-link="/profile">
+        <ion-label>Profile</ion-label>
+      </ion-item>
       <ion-item button @click="logout"><ion-label>Log Out</ion-label></ion-item>
     </ion-list>
   </ion-content>
@@ -12,6 +15,7 @@ import { defineComponent, inject } from "vue";
 
 export default defineComponent({
   name: "UserPopover",
+  props: ["onClick"],
   components: { IonContent, IonLabel, IonItem, IonList },
   setup(props, { emit }) {
     const auth = inject<VueAuth>("auth");
@@ -21,8 +25,14 @@ export default defineComponent({
         returnTo: `${window.location.origin}/signin`
       });
     };
+
+    const closePopover = () => {
+      props.onClick();
+    };
+
     return {
-      logout
+      logout,
+      closePopover
     };
   }
 });
