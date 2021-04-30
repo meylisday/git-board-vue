@@ -31,6 +31,7 @@ import Popover from "./Popover.vue";
 import { useStore } from "vuex";
 export default defineComponent({
   props: ["project"],
+  emits: ["onEdit"],
   components: {
     IonCard,
     IonCardTitle,
@@ -50,11 +51,16 @@ export default defineComponent({
           project: props.project,
           onClick: () => {
             popover.dismiss();
+          },
+          onEdit: (project: any) => {
+            emit("onEdit", project);
+            popover.dismiss();
           }
         }
       });
       return popover.present();
     };
+
     return {
       create,
       openPopover,

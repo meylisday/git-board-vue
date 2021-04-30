@@ -1,18 +1,16 @@
 <template>
   <ion-page class="profile-page">
-    <Header />
+    <h1>ijhghgjhg</h1>
   </ion-page>
 </template>
 <script lang="ts">
 import { VueAuth } from "@/auth";
 import { defineComponent, inject } from "vue";
-import { IonPage, IonButton } from "@ionic/vue";
-import Header from "@/components/Header.vue";
+import { IonPage } from "@ionic/vue";
 
 export default defineComponent({
   components: {
-    IonPage,
-    Header
+    IonPage
   },
   setup() {
     const auth = inject<VueAuth>("auth");

@@ -6,33 +6,42 @@ import Tasks from "../views/Tasks.vue";
 import Projects from "../views/Projects.vue";
 import Profile from "../views/Profile.vue";
 import SignIn from "../views/Login.vue";
+import GeneralGrid from "../views/GeneralGrid.vue";
 import { authLoginGuard } from "@/auth/authLoginGuard";
 import { authGuard } from "@/auth/authGuard";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/project/:projectId",
-    name: "Home",
-    component: Tasks,
-    beforeEnter: authGuard
-  },
-  {
     path: "/",
-    name: "Projects",
-    component: Projects,
-    beforeEnter: authGuard
+    name: "GeneralGrid",
+    component: GeneralGrid,
+    beforeEnter: authGuard,
+    children: [
+      {
+        path: "profile",
+        name: "Profile",
+        component: Profile,
+        beforeEnter: authGuard
+      },
+      {
+        path: "/",
+        name: "Projects",
+        component: Projects,
+        beforeEnter: authGuard
+      },
+      {
+        path: "/project/:projectId",
+        name: "Tasks",
+        component: Tasks,
+        beforeEnter: authGuard
+      }
+    ]
   },
   {
     path: "/signin",
     name: "SignIn",
     component: SignIn,
     beforeEnter: authLoginGuard
-  },
-  {
-    path: "/profile",
-    name: "Profile",
-    component: Profile,
-    beforeEnter: authGuard
   }
 ];
 

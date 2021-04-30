@@ -7,7 +7,6 @@ import createAuth0Client, {
   GetTokenWithPopupOptions,
   LogoutOptions
 } from "@auth0/auth0-spa-js";
-import { Vue } from "vue-class-component";
 import { User } from "../models/User";
 
 export type Auth0Options = {

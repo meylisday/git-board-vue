@@ -1,6 +1,5 @@
 <template>
   <ion-page>
-    <Header />
     <ion-content>
       <div class="text-alignt-end">
         <ion-button
@@ -49,7 +48,6 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-import Header from "@/components/Header.vue";
 import draggable from "vuedraggable";
 import Task from "@/components/Task.vue";
 import {
@@ -73,8 +71,7 @@ export default defineComponent({
     Modal,
     IonButton,
     IonPage,
-    IonContent,
-    Header
+    IonContent
   },
   setup(props) {
     const store = useStore();

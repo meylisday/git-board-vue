@@ -1,6 +1,8 @@
 <template>
   <nav class="header">
-    <ion-button router-link="/" routerDirection="root">Projects</ion-button>
+    <ion-button router-link="/" routerDirection="root">
+      Projects
+    </ion-button>
     <ion-chip @click="openPopover">
       <ion-avatar>
         <img :src="$auth.user.picture" />

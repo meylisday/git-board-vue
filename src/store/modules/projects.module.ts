@@ -1,6 +1,11 @@
 // import the api endpoints
 import { ActionContext } from "vuex";
-import { getAllProjects, deleteProject } from "../../api/projects";
+import {
+  getAllProjects,
+  deleteProject,
+  createProject,
+  updateProject
+} from "../../api/projects";
 import { RootState } from "../types";
 
 type State = {
@@ -31,6 +36,18 @@ const actions = {
     id: string
   ) {
     await deleteProject(id);
+  },
+  async createProjectAction(
+    { commit }: ActionContext<State, RootState>,
+    payload: any
+  ) {
+    await createProject(payload.project);
+  },
+  async updateProjectAction(
+    { commit }: ActionContext<State, RootState>,
+    payload: any
+  ) {
+    await updateProject(payload.project._id, payload.project);
   }
 };
 
