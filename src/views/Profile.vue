@@ -1,6 +1,18 @@
 <template>
   <ion-page class="profile-page">
-    <h1>ijhghgjhg</h1>
+    <ion-card class="profile-card">
+      <ion-card-header>
+        <ion-avatar>
+          <img :src="$auth.user.picture" />
+        </ion-avatar>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p><b>Email: </b>{{ $auth.user.email }}</p>
+        <p><b>Name: </b>{{ $auth.user.name }}</p>
+        <p><b>Nickname: </b>{{ $auth.user.nickname }}</p>
+      </ion-card-content>
+    </ion-card>
   </ion-page>
 </template>
 <script lang="ts">
@@ -19,4 +31,8 @@ export default defineComponent({
   }
 });
 </script>
-<style scoped></style>
+<style scoped>
+.profile-card {
+  width: 500px;
+}
+</style>
