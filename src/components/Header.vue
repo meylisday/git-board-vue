@@ -37,11 +37,6 @@ export default defineComponent({
   setup() {
     const auth = inject<VueAuth>("auth");
 
-    onMounted(async () => {
-      const result = await fetch("http://localhost:3000/api/user");
-      const data = await result.json();
-    });
-
     const openPopover = async (ev: Event) => {
       const popover = await popoverController.create({
         component: Popover,

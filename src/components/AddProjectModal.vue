@@ -32,6 +32,20 @@
               <ion-label position="floating">Description</ion-label>
               <ion-textarea v-model="description"></ion-textarea>
             </ion-item>
+            <ion-item>
+              <ion-label>Select</ion-label>
+              <ion-select multiple="true" v-model="selectedUsers">
+                <ion-select-option
+                  v-for="(user, index) in users"
+                  :key="index"
+                  :value="user.user_id"
+                >
+                  <ion-label>
+                    {{ user.name }}
+                  </ion-label>
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
           </slot>
         </section>
 
@@ -59,9 +73,12 @@ import {
   IonLabel,
   IonButton,
   IonTitle,
-  IonTextarea
+  IonTextarea,
+  IonAvatar,
+  IonSelectOption,
+  IonSelect
 } from "@ionic/vue";
-import { defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, onMounted, reactive, ref } from "vue";
 import { useStore } from "vuex";
 export default defineComponent({
   props: ["project"],
@@ -71,19 +88,23 @@ export default defineComponent({
     IonLabel,
     IonButton,
     IonTitle,
-    IonTextarea
+    IonTextarea,
+    IonSelectOption,
+    IonSelect
   },
   setup(props, { emit }) {
     const store = useStore();
     const title = ref(props.project?.title || "");
     const description = ref(props.project?.description || "");
+    const users = computed(() => store.getters.getUsers);
+    const selectedUsers = ref(props.project?.users || []);
 
     const close = () => {
       emit("close");
     };
 
     onMounted(() => {
-      console.log(props.project?.title);
+      store.dispatch("fetchUsers");
     });
 
     const addProject = async () => {
@@ -91,7 +112,8 @@ export default defineComponent({
         await store.dispatch("createProjectAction", {
           project: {
             title: title.value,
-            description: description.value
+            description: description.value,
+            users: selectedUsers.value
           }
         });
         await store.dispatch("fetchProjects");
@@ -119,7 +141,9 @@ export default defineComponent({
       close,
       title,
       handleClick,
-      description
+      description,
+      users,
+      selectedUsers
     };
   }
 });

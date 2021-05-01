@@ -1,6 +1,5 @@
 import httpClient from "./httpClient";
 
-const TASKS = "/task";
 const PROJECT = "/project";
 
 const getAllTasks = (projectId: string) =>
