@@ -13,6 +13,14 @@
     <ion-card-content>
       {{ project.description }}
     </ion-card-content>
+    <div>
+      <ion-chip v-for="(user, index) in users" :key="index">
+        <ion-avatar>
+          <img :src="user.picture" />
+        </ion-avatar>
+        <ion-label>{{ user.name }}</ion-label>
+      </ion-chip>
+    </div>
   </ion-card>
 </template>
 
@@ -23,10 +31,13 @@ import {
   IonCardTitle,
   IonCardHeader,
   popoverController,
-  IonIcon
+  IonIcon,
+  IonAvatar,
+  IonChip,
+  IonLabel
 } from "@ionic/vue";
 import { create, menu } from "ionicons/icons";
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import Popover from "./Popover.vue";
 import { useStore } from "vuex";
 export default defineComponent({
@@ -37,10 +48,25 @@ export default defineComponent({
     IonCardTitle,
     IonCardHeader,
     IonCardContent,
-    IonIcon
+    IonIcon,
+    IonAvatar,
+    IonChip,
+    IonLabel
   },
   setup(props, { emit }) {
     const store = useStore();
+    const allUsers = computed(() => store.getters.getUsers);
+
+    const users = computed(() =>
+      allUsers?.value.filter((user: any) =>
+        props.project?.users?.includes(user.user_id)
+      )
+    );
+
+    onMounted(() => {
+      store.dispatch("fetchUsers");
+    });
+
     const openPopover = async (ev: Event) => {
       const popover = await popoverController.create({
         component: Popover,
@@ -64,7 +90,8 @@ export default defineComponent({
     return {
       create,
       openPopover,
-      menu
+      menu,
+      users
     };
   }
 });

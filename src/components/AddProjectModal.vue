@@ -36,8 +36,8 @@
               <ion-label>Select</ion-label>
               <ion-select multiple="true" v-model="selectedUsers">
                 <ion-select-option
-                  v-for="(user, index) in users"
-                  :key="index"
+                  v-for="user in users"
+                  :key="user.user_i"
                   :value="user.user_id"
                 >
                   <ion-label>
@@ -103,10 +103,6 @@ export default defineComponent({
       emit("close");
     };
 
-    onMounted(() => {
-      store.dispatch("fetchUsers");
-    });
-
     const addProject = async () => {
       if (description.value && title.value) {
         await store.dispatch("createProjectAction", {
@@ -127,7 +123,8 @@ export default defineComponent({
           project: {
             ...props.project,
             title: title.value,
-            description: description.value
+            description: description.value,
+            users: selectedUsers.value
           }
         });
         await store.dispatch("fetchProjects");
