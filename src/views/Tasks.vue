@@ -1,7 +1,10 @@
 <template>
   <ion-page>
     <ion-content>
-      <div class="text-alignt-end">
+      <div class="text-align-end">
+        <ion-toolbar class="search-width">
+          <ion-searchbar @ionChange="handleChange"></ion-searchbar>
+        </ion-toolbar>
         <ion-button
           expand="expand"
           color="primary"
@@ -56,7 +59,9 @@ import {
   IonRow,
   IonButton,
   IonPage,
-  IonContent
+  IonContent,
+  IonSearchbar,
+  IonToolbar
 } from "@ionic/vue";
 import Modal from "@/components/AddTaskModal.vue";
 import { useRoute } from "vue-router";
@@ -71,7 +76,9 @@ export default defineComponent({
     Modal,
     IonButton,
     IonPage,
-    IonContent
+    IonContent,
+    IonSearchbar,
+    IonToolbar
   },
   setup(props) {
     const store = useStore();
@@ -80,7 +87,7 @@ export default defineComponent({
     const { projectId } = route.params;
 
     onMounted(() => {
-      store.dispatch("fetchTasks", projectId);
+      store.dispatch("fetchTasks", { projectId: projectId });
     });
 
     const columns = computed(() => store.getters.getTasks);
@@ -101,6 +108,12 @@ export default defineComponent({
     const closeModal = () => {
       isModalVisible.value = false;
     };
+    const handleChange = (e: any) => {
+      store.dispatch("fetchTasks", {
+        projectId: projectId,
+        search: e.detail.value
+      });
+    };
 
     return {
       columns,
@@ -108,7 +121,8 @@ export default defineComponent({
       isModalVisible,
       showModal,
       closeModal,
-      projectId
+      projectId,
+      handleChange
     };
   }
 });
@@ -135,10 +149,15 @@ export default defineComponent({
   text-align: center;
   text-transform: capitalize;
 }
-.text-alignt-end {
-  text-align: right;
+.text-align-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 .ion-page {
   justify-content: unset;
+}
+.search-width {
+  width: 500px;
 }
 </style>

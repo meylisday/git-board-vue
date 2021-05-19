@@ -2,7 +2,8 @@ import httpClient from "./httpClient";
 
 const PROJECTS = "/project";
 
-const getAllProjects = () => httpClient.get(PROJECTS);
+const getAllProjects = (search?: string) =>
+  httpClient.get(PROJECTS, { params: { search } });
 
 const createProject = (project: any) => httpClient.post(PROJECTS, project);
 

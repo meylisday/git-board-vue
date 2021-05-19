@@ -1,6 +1,9 @@
 <template>
   <ion-page>
-    <div class="text-alignt-end">
+    <div class="text-align-end">
+      <ion-toolbar class="search-width">
+        <ion-searchbar @ionChange="handleChange"></ion-searchbar>
+      </ion-toolbar>
       <ion-button
         expand="expand"
         color="primary"
@@ -31,7 +34,13 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-import { IonPage, IonButton, IonRow } from "@ionic/vue";
+import {
+  IonPage,
+  IonButton,
+  IonRow,
+  IonSearchbar,
+  IonToolbar
+} from "@ionic/vue";
 
 import Project from "@/components/Project.vue";
 import Modal from "@/components/AddProjectModal.vue";
@@ -42,7 +51,9 @@ export default defineComponent({
     IonPage,
     Modal,
     IonButton,
-    IonRow
+    IonRow,
+    IonSearchbar,
+    IonToolbar
   },
   setup() {
     const store = useStore();
@@ -68,13 +79,18 @@ export default defineComponent({
       selectedProject.value = null;
     };
 
+    const handleChange = (e:any) => {
+      store.dispatch("fetchProjects", e.detail.value);
+    };
+
     return {
       projects,
       isModalVisible,
       showModal,
       closeModal,
       selectedProject,
-      handleEdit
+      handleEdit,
+      handleChange
     };
   }
 });
@@ -95,10 +111,15 @@ export default defineComponent({
 .ion-page {
   justify-content: unset;
 }
-.text-alignt-end {
-  text-align: right;
+.text-align-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 .modal-backdrop {
   background-color: transparent;
+}
+.search-width {
+  width: 500px;
 }
 </style>

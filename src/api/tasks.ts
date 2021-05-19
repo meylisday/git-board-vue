@@ -2,8 +2,8 @@ import httpClient from "./httpClient";
 
 const PROJECT = "/project";
 
-const getAllTasks = (projectId: string) =>
-  httpClient.get(`${PROJECT}/${projectId}/task`);
+const getAllTasks = (projectId: string, search?: string) =>
+  httpClient.get(`${PROJECT}/${projectId}/task`, { params: { search } });
 
 const updateTask = (projectId: string, taskId: string, task: any) =>
   httpClient.put(`${PROJECT}/${projectId}/task/${taskId}`, task);

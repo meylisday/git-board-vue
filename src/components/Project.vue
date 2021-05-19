@@ -12,6 +12,11 @@
 
     <ion-card-content>
       {{ project.description }}
+      <p v-if="project.tasks.length === 0">No tasks</p>
+      <p v-else-if="project.tasks.length > 1">
+        {{ project.tasks.length }} tasks
+      </p>
+      <p v-else>Have 1 task</p>
     </ion-card-content>
     <div>
       <ion-chip v-for="(user, index) in users" :key="index">

@@ -27,10 +27,10 @@ const getters = {
 const actions = {
   async fetchTasks(
     { commit }: ActionContext<State, RootState>,
-    projectId: string
+    payload: { projectId: string; search?: string }
   ) {
     try {
-      const response = await getAllTasks(projectId);
+      const response = await getAllTasks(payload.projectId, payload.search);
 
       const tasks = ["backlog", "todo", "review", "done"].map(key => ({
         key,

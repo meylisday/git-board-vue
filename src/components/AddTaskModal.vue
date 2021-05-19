@@ -108,7 +108,7 @@ export default defineComponent({
             status: selectedOption.value
           }
         });
-        await store.dispatch("fetchTasks", props.projectId);
+        await store.dispatch("fetchTasks", { projectId: props.projectId });
         emit("close");
       }
     };
@@ -124,7 +124,7 @@ export default defineComponent({
             status: selectedOption.value
           }
         });
-        await store.dispatch("fetchTasks", props.projectId);
+        await store.dispatch("fetchTasks", { projectId: props.projectId });
         emit("close");
       }
     };

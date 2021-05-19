@@ -74,7 +74,7 @@ export default defineComponent({
         projectId: props.projectId,
         taskId: id
       });
-      await store.dispatch("fetchTasks", props.projectId);
+      await store.dispatch("fetchTasks", { projectId: props.projectId });
       emit("close");
     };
     return {

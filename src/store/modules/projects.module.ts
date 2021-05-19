@@ -23,9 +23,12 @@ const getters = {
 };
 
 const actions = {
-  async fetchProjects({ commit }: ActionContext<State, RootState>) {
+  async fetchProjects(
+    { commit }: ActionContext<State, RootState>,
+    query?: string
+  ) {
     try {
-      const response = await getAllProjects();
+      const response = await getAllProjects(query);
       commit("setProjects", response.data);
     } catch (error) {
       // handle the error here
