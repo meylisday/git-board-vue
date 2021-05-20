@@ -14,6 +14,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.0.0-beta2",
     "core-js": "^3.6.5",
+    "firebase": "^8.6.1",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "register-service-worker": "^1.7.1",
