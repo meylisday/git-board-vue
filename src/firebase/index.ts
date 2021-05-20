@@ -28,15 +28,17 @@ const servers = {
 export class WebRTCInterface {
   private localStream?: Promise<MediaStream>;
   private remoteStream: MediaStream;
-  // private perConnection: RTCPeerConnection;
+  private perConnection: RTCPeerConnection;
 
   constructor() {
     this.localStream = navigator.mediaDevices.getUserMedia({
       video: true,
-      audio: true
+      audio: false
     });
     this.remoteStream = new MediaStream();
-    // this.perConnection = new RTCPeerConnection(servers);
+    this.perConnection = new RTCPeerConnection(servers);
+
+    this.initMediaSources();
   }
 
   get userVideo() {
@@ -46,10 +48,11 @@ export class WebRTCInterface {
   get participantsVideo() {
     return this.remoteStream;
   }
-/*
-  async onStreamStart() {
+
+  private async initMediaSources() {
     // Push tracks from local stream to peer connection
     const localStream = await this.localStream;
+
     localStream?.getTracks().forEach(track => {
       this.perConnection.addTrack(track, localStream);
     });
@@ -62,52 +65,58 @@ export class WebRTCInterface {
     };
   }
 
-  async onOfferCreate() {
-    const callDoc = firestore.collection("calls").doc();
-    const offerCandidates = callDoc.collection("offerCandidates");
-    const answerCandidates = callDoc.collection("answerCandidates");
+  async createOffer() {
+    try {
+      const callDoc = firestore.collection("calls").doc();
+      const offerCandidates = callDoc.collection("offerCandidates");
+      const answerCandidates = callDoc.collection("answerCandidates");
 
-    const callId = callDoc.id;
+      console.log(7);
 
-    // Get candidates for caller, save to db
-    this.perConnection.onicecandidate = event => {
-      event.candidate && offerCandidates.add(event.candidate.toJSON());
-    };
+      const callId = callDoc.id;
 
-    // Create offer
-    const offerDescription = await this.perConnection.createOffer();
-    await this.perConnection.setLocalDescription(offerDescription);
+      // Get candidates for caller, save to db
+      this.perConnection.onicecandidate = event => {
+        event.candidate && offerCandidates.add(event.candidate.toJSON());
+      };
 
-    const offer = {
-      sdp: offerDescription.sdp,
-      type: offerDescription.type
-    };
+      // Create offer
+      const offerDescription = await this.perConnection.createOffer();
+      await this.perConnection.setLocalDescription(offerDescription);
 
-    await callDoc.set({ offer });
+      const offer = {
+        sdp: offerDescription.sdp,
+        type: offerDescription.type
+      };
 
-    // Listen for remote answer
-    callDoc.onSnapshot(snapshot => {
-      const data = snapshot.data();
-      if (!this.perConnection.currentRemoteDescription && data?.answer) {
-        const answerDescription = new RTCSessionDescription(data.answer);
-        this.perConnection.setRemoteDescription(answerDescription);
-      }
-    });
+      await callDoc.set({ offer });
 
-    // When answered, add candidate to peer connection
-    answerCandidates.onSnapshot(snapshot => {
-      snapshot.docChanges().forEach(change => {
-        if (change.type === "added") {
-          const candidate = new RTCIceCandidate(change.doc.data());
-          this.perConnection.addIceCandidate(candidate);
+      // Listen for remote answer
+      callDoc.onSnapshot(snapshot => {
+        const data = snapshot.data();
+        if (!this.perConnection.currentRemoteDescription && data?.answer) {
+          const answerDescription = new RTCSessionDescription(data.answer);
+          this.perConnection.setRemoteDescription(answerDescription);
         }
       });
-    });
 
-    return callId;
+      // When answered, add candidate to peer connection
+      answerCandidates.onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            const candidate = new RTCIceCandidate(change.doc.data());
+            this.perConnection.addIceCandidate(candidate);
+          }
+        });
+      });
+
+      return callId;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
-  async onCallAnswer(callId: string) {
+  async aceptOffer(callId: string) {
     const callDoc = firestore.collection("calls").doc(callId);
     const answerCandidates = callDoc.collection("answerCandidates");
     const offerCandidates = callDoc.collection("offerCandidates");
@@ -143,5 +152,4 @@ export class WebRTCInterface {
       });
     });
   }
-*/
 }
