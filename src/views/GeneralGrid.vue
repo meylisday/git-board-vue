@@ -1,19 +1,24 @@
 <template>
-  <ion-app class="app">
+  <ion-page>
+    <Header />
     <div class="router-wrapper">
       <ion-router-outlet />
     </div>
-  </ion-app>
+  </ion-page>
 </template>
-
-<script>
-import { IonApp, IonRouterOutlet } from "@ionic/vue";
+<script lang="ts">
 import { defineComponent } from "vue";
+import { IonPage, IonRouterOutlet } from "@ionic/vue";
+import Header from "@/components/Header.vue";
+
 export default defineComponent({
-  name: "App",
   components: {
-    IonApp,
+    IonPage,
+    Header,
     IonRouterOutlet
+  },
+  setup() {
+    return {};
   }
 });
 </script>
@@ -21,8 +26,5 @@ export default defineComponent({
 .router-wrapper {
   position: relative;
   height: 100%;
-}
-.app {
-  padding: 1rem;
 }
 </style>
