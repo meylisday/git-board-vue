@@ -8,7 +8,7 @@
             >Start call</ion-button
           >
           <ion-button expand="expand" color="primary">Answer call</ion-button>
-          <video ref="localStream" autoplay></video>
+          <video ref="localStream" autoplay muted></video>
         </div>
         <div class="remote-camera-wrapper">
           <video ref="remoteStream" autoplay></video>
