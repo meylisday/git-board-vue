@@ -33,7 +33,7 @@ export class WebRTCInterface {
   constructor() {
     this.localStream = navigator.mediaDevices.getUserMedia({
       video: true,
-      audio: false
+      audio: true
     });
     this.remoteStream = new MediaStream();
     this.perConnection = new RTCPeerConnection(servers);
