@@ -6,8 +6,9 @@ import Tasks from "../views/Tasks.vue";
 import Projects from "../views/Projects.vue";
 import Profile from "../views/Profile.vue";
 import SignIn from "../views/Login.vue";
-import Videochat from "../views/Videochat.vue";
+import Rooms from "../views/Rooms.vue";
 import GeneralGrid from "../views/GeneralGrid.vue";
+import Call from "../views/Call.vue";
 import { authLoginGuard } from "@/auth/authLoginGuard";
 import { authGuard } from "@/auth/authGuard";
 
@@ -37,9 +38,15 @@ const routes: Array<RouteRecordRaw> = [
         beforeEnter: authGuard
       },
       {
-        path: "videochat",
-        name: "Videochat",
-        component: Videochat,
+        path: "/project/:projectId/rooms",
+        name: "Rooms",
+        component: Rooms,
+        beforeEnter: authGuard
+      },
+      {
+        path: "/rooms/:roomId/call",
+        name: "Call",
+        component: Call,
         beforeEnter: authGuard
       }
     ]

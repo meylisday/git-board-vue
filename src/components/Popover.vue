@@ -4,6 +4,9 @@
       <ion-item button @click="openProject(project._id)">
         <ion-label>Go to Board</ion-label></ion-item
       >
+      <ion-item button @click="openRooms(project._id)"
+        ><ion-label>Rooms</ion-label>
+      </ion-item>
       <ion-item button @click="updateProject">
         <ion-label>Edit project </ion-label>
       </ion-item>
@@ -33,27 +36,23 @@ export default defineComponent({
       await store.dispatch("fetchProjects");
       await props.onClick();
     };
-    // const showModal = () => {
-    //   isModalVisible.value = true;
-    // };
     const updateProject = () => {
       props.onEdit(props.project);
     };
-
-    // const closeModal = () => {
-    //   isModalVisible.value = false;
-    // };
-
     const openProject = (id: string) => {
       props.onClick();
       router.push(`/project/${id}`);
     };
-
+    const openRooms = (id: string) => {
+      props.onClick();
+      router.push(`/project/${id}/rooms`);
+    };
     return {
       deleteProject,
       openProject,
       isModalVisible,
-      updateProject
+      updateProject,
+      openRooms
     };
   }
 });

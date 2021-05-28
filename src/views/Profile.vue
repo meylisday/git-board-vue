@@ -26,7 +26,6 @@ export default defineComponent({
   },
   setup() {
     const auth = inject<VueAuth>("auth");
-    console.log(auth?.user);
     return {};
   }
 });

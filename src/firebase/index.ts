@@ -71,8 +71,6 @@ export class WebRTCInterface {
       const offerCandidates = callDoc.collection("offerCandidates");
       const answerCandidates = callDoc.collection("answerCandidates");
 
-      console.log(7);
-
       const callId = callDoc.id;
 
       // Get candidates for caller, save to db
@@ -144,7 +142,6 @@ export class WebRTCInterface {
 
     offerCandidates.onSnapshot(snapshot => {
       snapshot.docChanges().forEach(change => {
-        console.log(change);
         if (change.type === "added") {
           const data = change.doc.data();
           this.perConnection.addIceCandidate(new RTCIceCandidate(data));
