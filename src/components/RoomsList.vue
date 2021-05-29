@@ -1,7 +1,9 @@
 <template>
   <ion-item>
     <ion-label>{{ room.title }}</ion-label>
-    <ion-button expand="expand" color="primary">Join</ion-button>
+    <ion-button expand="expand" color="primary" @click="joinRoom(room._id)"
+      >Join</ion-button
+    >
     <ion-button expand="expand" color="danger" @click="deleteRoom(room._id)">
       Delete
     </ion-button>
@@ -10,6 +12,7 @@
 
 <script lang="ts">
 import { IonLabel, IonItem, IonButton } from "@ionic/vue";
+import router from "@/router";
 import { create, menu } from "ionicons/icons";
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
@@ -19,7 +22,7 @@ export default defineComponent({
   components: {
     IonLabel,
     IonItem,
-    IonButton
+    IonButton,
   },
   setup(props) {
     const store = useStore();
@@ -28,16 +31,20 @@ export default defineComponent({
     const deleteRoom = async (id: string) => {
       await store.dispatch("deleteRoomAction", {
         projectId: projectId,
-        roomId: id
+        roomId: id,
       });
       await store.dispatch("fetchRooms", { projectId: projectId });
+    };
+    const joinRoom = async (id: string) => {
+      router.push(`/project/${projectId}/rooms/${id}/call`);
     };
     return {
       create,
       menu,
-      deleteRoom
+      joinRoom,
+      deleteRoom,
     };
-  }
+  },
 });
 </script>
 

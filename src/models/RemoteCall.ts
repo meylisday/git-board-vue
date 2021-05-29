@@ -135,11 +135,11 @@ export class RemoteCall {
   }
 
   private async handlePeerConnected(peerId: string) {
-    if (this.peer?.destroyed || !this.stream) {
+    if (!this.peer || this.peer?.destroyed || !this.stream) {
       return;
     }
 
-    const call = this.peer!.call(peerId, this.stream);
+    const call = this.peer.call(peerId, this.stream);
 
     call.on(
       "stream",

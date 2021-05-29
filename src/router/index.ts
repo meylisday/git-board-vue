@@ -44,7 +44,7 @@ const routes: Array<RouteRecordRaw> = [
         beforeEnter: authGuard
       },
       {
-        path: "/rooms/:roomId/call",
+        path: "/project/:projectId/rooms/:roomId/call",
         name: "Call",
         component: Call,
         beforeEnter: authGuard
