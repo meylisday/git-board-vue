@@ -9,8 +9,8 @@
       >
         <header class="modal-header" id="modalTitle">
           <slot name="header">
-            <ion-title v-if="project">Updating project</ion-title>
-            <ion-title v-else>Adding project</ion-title>
+            <ion-title color="dark" v-if="project">Updating project</ion-title>
+            <ion-title color="dark" v-else>Adding project</ion-title>
           </slot>
           <button
             type="button"
@@ -52,12 +52,12 @@
         <footer class="modal-footer">
           <ion-button
             type="button"
-            color="primary"
+            color="dark"
             @click="handleClick"
             v-if="project"
             >Save</ion-button
           >
-          <ion-button type="button" color="primary" @click="handleClick" v-else>
+          <ion-button type="button" color="dark" @click="handleClick" v-else>
             Create</ion-button
           >
         </footer>

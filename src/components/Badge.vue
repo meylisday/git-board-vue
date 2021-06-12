@@ -1,5 +1,5 @@
 <template>
-  <ion-badge color="primary">11</ion-badge>
+  <ion-badge color="dark">11</ion-badge>
 </template>
 <script lang="ts">
 import { IonBadge } from "@ionic/vue";

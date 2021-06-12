@@ -1,7 +1,14 @@
 <template>
   <nav class="header">
-    <ion-button router-link="/" routerDirection="root"> Projects </ion-button>
-    <ion-chip @click="openPopover">
+    <ion-button
+      router-link="/"
+      routerDirection="root"
+      fill="clear"
+      color="light"
+    >
+      Home
+    </ion-button>
+    <ion-chip @click="openPopover" color="light" outline>
       <ion-avatar>
         <img :src="$auth.user.picture" />
       </ion-avatar>
@@ -20,7 +27,7 @@ import {
   IonAvatar,
   IonChip,
   popoverController,
-  IonLabel,
+  IonLabel
 } from "@ionic/vue";
 import Popover from "./UserPopover.vue";
 
@@ -44,17 +51,17 @@ export default defineComponent({
         componentProps: {
           onClick: () => {
             popover.dismiss();
-          },
-        },
+          }
+        }
       });
       return popover.present();
     };
 
     return {
       auth,
-      openPopover,
+      openPopover
     };
-  },
+  }
 });
 </script>
 
@@ -63,6 +70,10 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: var(--primary);
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
 }
 .header-link {
   margin: 0 1rem;

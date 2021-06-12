@@ -4,9 +4,6 @@
       <ion-item @click="closePopover" button router-link="/profile">
         <ion-label>Profile</ion-label>
       </ion-item>
-      <ion-item button @click="closePopover" router-link="/videochat">
-        <ion-label>Chat</ion-label>
-      </ion-item>
       <ion-item button @click="logout"><ion-label>Log Out</ion-label></ion-item>
     </ion-list>
   </ion-content>
@@ -20,7 +17,7 @@ export default defineComponent({
   name: "UserPopover",
   props: ["onClick"],
   components: { IonContent, IonLabel, IonItem, IonList },
-  setup(props, { emit }) {
+  setup(props) {
     const auth = inject<VueAuth>("auth");
 
     const logout = () => {

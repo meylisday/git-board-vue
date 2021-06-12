@@ -1,7 +1,7 @@
 <template>
   <ion-item>
     <ion-label>{{ room.title }}</ion-label>
-    <ion-button expand="expand" color="primary" @click="joinRoom(room._id)"
+    <ion-button expand="expand" color="dark" @click="joinRoom(room._id)"
       >Join</ion-button
     >
     <ion-button expand="expand" color="danger" @click="deleteRoom(room._id)">

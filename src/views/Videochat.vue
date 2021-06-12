@@ -3,11 +3,11 @@
     <ion-content>
       <div class="main-wrapper">
         <div class="user-camera-wrapper">
-          <ion-button expand="expand" color="primary">Open Camera</ion-button>
-          <ion-button expand="expand" color="primary" @click="handleStartCall"
+          <ion-button expand="expand" color="dark">Open Camera</ion-button>
+          <ion-button expand="expand" color="dark" @click="handleStartCall"
             >Start call</ion-button
           >
-          <ion-button expand="expand" color="primary">Answer call</ion-button>
+          <ion-button expand="expand" color="dark">Answer call</ion-button>
           <video ref="localStream" autoplay muted></video>
         </div>
         <div class="remote-camera-wrapper">

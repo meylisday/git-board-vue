@@ -9,7 +9,7 @@
       >
         <header class="modal-header" id="modalTitle">
           <slot name="header">
-            <ion-title>Adding room</ion-title>
+            <ion-title color="dark">Adding room</ion-title>
           </slot>
           <button
             type="button"
@@ -31,7 +31,7 @@
         </section>
 
         <footer class="modal-footer">
-          <ion-button type="button" color="primary" @click="addRoom"
+          <ion-button type="button" color="dark" @click="addRoom"
             >Create</ion-button
           >
         </footer>

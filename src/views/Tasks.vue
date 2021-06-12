@@ -1,18 +1,22 @@
 <template>
   <ion-page>
+    <div class="text-align-end">
+      <ion-toolbar class="search-width">
+        <ion-searchbar @ionChange="handleChange"></ion-searchbar>
+      </ion-toolbar>
+      <ion-button
+        expand="expand"
+        color="dark"
+        class="show-modal-button"
+        @click="showModal"
+        >Add task</ion-button
+      >
+    </div>
     <ion-content>
-      <div class="text-align-end">
-        <ion-toolbar class="search-width">
-          <ion-searchbar @ionChange="handleChange"></ion-searchbar>
-        </ion-toolbar>
-        <ion-button
-          expand="expand"
-          color="primary"
-          class="show-modal-button"
-          @click="showModal"
-          >Add task</ion-button
-        >
-      </div>
+      <ion-text class="instruction">
+        <ion-icon :icon="informationCircleOutline" color="primary" />
+        <span>To change task's status grag-and-drop card from one column to another</span>
+      </ion-text>
       <ion-grid class="width column">
         <ion-row class="add-task-button">
           <Modal
@@ -34,7 +38,7 @@
               v-model="column.items"
               group="tasks"
               item-key="_id"
-              class="column overflow"
+              class="column overflow column-hover"
               @change="updateStatus($event, column.key)"
             >
               <template #item="{element}">
@@ -49,6 +53,7 @@
 </template>
 
 <script lang="ts">
+import { informationCircleOutline } from "ionicons/icons";
 import { defineComponent, computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import draggable from "vuedraggable";
@@ -56,6 +61,8 @@ import Task from "@/components/Task.vue";
 import {
   IonCol,
   IonGrid,
+  IonIcon,
+  IonText,
   IonRow,
   IonButton,
   IonPage,
@@ -72,6 +79,8 @@ export default defineComponent({
     Task,
     IonCol,
     IonGrid,
+    IonIcon,
+    IonText,
     IonRow,
     Modal,
     IonButton,
@@ -122,7 +131,8 @@ export default defineComponent({
       showModal,
       closeModal,
       projectId,
-      handleChange
+      handleChange,
+      informationCircleOutline
     };
   }
 });
@@ -152,12 +162,27 @@ export default defineComponent({
 .text-align-end {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+  margin: 10px 0;
 }
 .ion-page {
   justify-content: unset;
 }
 .search-width {
   width: 500px;
+  --background: transparent;
+}
+.instruction {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px;
+}
+.column-hover {
+  background: rgba(0,0,0, 0.05);
+  padding: 5px 0;
+}
+.column-hover:hover {
+  background: rgba(0,0,0, 0.1);
 }
 </style>

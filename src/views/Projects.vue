@@ -6,7 +6,7 @@
       </ion-toolbar>
       <ion-button
         expand="expand"
-        color="primary"
+        color="dark"
         class="show-modal-button"
         @click="showModal"
         >Add project</ion-button
@@ -114,12 +114,14 @@ export default defineComponent({
 .text-align-end {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+  margin: 10px 0;
 }
 .modal-backdrop {
   background-color: transparent;
 }
 .search-width {
   width: 500px;
+  --background: transparent;
 }
 </style>

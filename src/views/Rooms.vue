@@ -9,7 +9,7 @@
       <div class="text-align-end">
         <ion-button
           expand="expand"
-          color="primary"
+          color="dark"
           class="show-modal-button"
           @click="showModal"
           >Add room

@@ -23,6 +23,7 @@ function once(callback: Function) {
 export type PeerEvent = {
   peerId?: string;
   stream?: MediaStream;
+  metadata?: object
 };
 
 export class RemoteCall {
@@ -37,9 +38,11 @@ export class RemoteCall {
   private stream?: MediaStream;
   private peer?: Peer;
   private url: string;
+  private metadata: any;
 
-  constructor(url: string) {
+  constructor(url: string, metadata: any = {}) {
     this.url = url;
+    this.metadata = metadata;
   }
 
   async join(roomId: string) {
@@ -55,7 +58,7 @@ export class RemoteCall {
 
       this.peer.on("open", (id: string) => {
         this.websocket?.send(
-          JSON.stringify({ type: "join", roomId, peerId: id })
+          JSON.stringify({ type: "join", roomId, peerId: id, metadata: this.metadata })
         );
 
         this.events[PEER_OPENED]({ peerId: id });
@@ -68,7 +71,8 @@ export class RemoteCall {
           once((remoteStream: MediaStream) => {
             this.events[PEER_STREAM_OPENED]({
               peerId: call.peer,
-              stream: remoteStream
+              stream: remoteStream,
+              metadata: call.metadata,
             });
           })
         );
@@ -86,14 +90,14 @@ export class RemoteCall {
     };
 
     this.websocket.onmessage = async event => {
-      const { type, peerId } = JSON.parse(event.data);
+      const { type, peerId, metadata } = JSON.parse(event.data);
 
       if (type === "disconnected") {
         return this.handlePeerDisconnected(peerId);
       }
 
       if (type === "connected") {
-        return this.handlePeerConnected(peerId);
+        return this.handlePeerConnected(peerId, metadata);
       }
     };
   }
@@ -124,7 +128,7 @@ export class RemoteCall {
       this.stream = new MediaStream();
     }
 
-    this.events[PEER_STREAM_OPENED]({ stream: this.stream });
+    this.events[PEER_STREAM_OPENED]({ stream: this.stream, metadata: this.metadata });
   }
 
   private handlePeerDisconnected(peerId: string) {
@@ -134,17 +138,17 @@ export class RemoteCall {
     }
   }
 
-  private async handlePeerConnected(peerId: string) {
+  private async handlePeerConnected(peerId: string, metadata?: object) {
     if (!this.peer || this.peer?.destroyed || !this.stream) {
       return;
     }
 
-    const call = this.peer.call(peerId, this.stream);
+    const call = this.peer.call(peerId, this.stream, { metadata: this.metadata });
 
     call.on(
       "stream",
       once((stream: MediaStream) => {
-        this.events[PEER_STREAM_OPENED]({ peerId, stream });
+        this.events[PEER_STREAM_OPENED]({ peerId, stream, metadata });
       })
     );
 

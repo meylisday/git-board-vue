@@ -2,8 +2,23 @@
   <ion-page>
     <ion-content>
       <div class="main">
+        <div class="video-grid">
+          <VideoCard muted="true" :stream="localVideo" :metadata="{ picture: $auth.user?.picture, name: 'You' }"/>
+
+          <VideoCard
+            v-for="[key, value] in connectedUsers"
+            :key="key"
+            :stream="value.stream"
+            :metadata="value.metadata"
+          />
+        </div>
         <div class="controls">
-          <ion-button expand="expand" @click="handleAudioToggle">
+          <ion-button
+            expand="expand"
+            @click="handleAudioToggle"
+            fill="clear"
+            color="light"
+          >
             <ion-icon
               :icon="isAudioMuted ? volumeMuteOutline : volumeHighOutline"
               size="small"
@@ -11,23 +26,21 @@
             /><span class="margin-text">{{ isAudioMuted ? "Unmute" : "Mute" }}</span>
           </ion-button>
 
-          <ion-button expand="expand" @click="handleVideoToggle">
+          <ion-button
+            expand="expand"
+            @click="handleVideoToggle"
+            fill="clear"
+            color="light"
+          >
             <ion-icon
               :icon="isVideoMuted ? videocamOffOutline : videocamOutline"
               size="small"
               class="action-icon"
             /><span class="margin-text">{{ isVideoMuted ? "Off" : "On" }}</span>
           </ion-button>
-        </div>
-        <div class="video-grid">
-          <img :src="$auth.user.picture" />
-          <video ref="localVideo" muted autoplay />
-          <video
-            v-for="[key, value] in videos"
-            :key="key"
-            :srcObject.prop="value"
-            autoplay
-          />
+          <ion-button color="danger" expand="expand" @click="handleLeaveRoom">
+            Hang Up
+          </ion-button>
         </div>
       </div>
     </ion-content>
@@ -35,13 +48,15 @@
 </template>
 <script lang="ts">
 import { useRoute } from "vue-router";
-import { defineComponent, ref, reactive, onUnmounted } from "vue";
+import { inject, defineComponent, ref, reactive, onUnmounted } from "vue";
 import {
   volumeMuteOutline,
   volumeHighOutline,
   videocamOutline,
   videocamOffOutline,
 } from "ionicons/icons";
+import router from "@/router";
+import { VueAuth } from "@/auth";
 import { IonPage, IonContent, IonButton, IonIcon } from "@ionic/vue";
 import {
   RemoteCall,
@@ -50,6 +65,7 @@ import {
   PEER_STREAM_CLOSED,
   PeerEvent,
 } from "@/models/RemoteCall";
+import VideoCard from "@/components/VideoCard.vue";
 
 export default defineComponent({
   components: {
@@ -57,16 +73,18 @@ export default defineComponent({
     IonContent,
     IonButton,
     IonIcon,
+    VideoCard,
   },
   setup() {
+    const auth = inject<VueAuth>("auth");
     const route = useRoute();
-    const { roomId } = route.params;
+    const { projectId, roomId } = route.params;
     const isAudioMuted = ref(true);
     const isVideoMuted = ref(false);
     const localVideo = ref();
-    const videos = reactive(new Map());
+    const connectedUsers = reactive(new Map());
 
-    const call = new RemoteCall(process.env.VUE_APP_BASE_WS_URL);
+    const call = new RemoteCall(process.env.VUE_APP_BASE_WS_URL, auth?.user);
 
     call.join(roomId as string);
 
@@ -77,31 +95,41 @@ export default defineComponent({
         return;
       }
 
+      stream.getAudioTracks()[0].enabled = false
+
       isAudioMuted.value = !stream.getAudioTracks()[0].enabled;
       isVideoMuted.value = !stream.getVideoTracks()[0].enabled;
     });
 
-    call.on(PEER_STREAM_OPENED, ({ peerId, stream }: PeerEvent) => {
-      if (peerId) {
-        videos.set(peerId, stream);
-      } else {
-        const video = localVideo.value;
+    call.on(PEER_STREAM_CLOSED, ({ peerId }: PeerEvent) => {
+      if (connectedUsers.has(peerId)) {
+        connectedUsers.delete(peerId);
+      }
+    });
 
-        video.srcObject = stream;
+    call.on(PEER_STREAM_OPENED, ({ peerId, stream, metadata }: PeerEvent) => {
+      if (peerId) {
+        connectedUsers.set(peerId, { stream, metadata });
+      } else {
+        localVideo.value = stream;
       }
     });
 
     call.on(PEER_STREAM_CLOSED, ({ peerId }: PeerEvent) => {
-      if (videos.has(peerId)) {
-        videos.delete(peerId);
+      if (connectedUsers.has(peerId)) {
+        connectedUsers.delete(peerId);
       }
     });
 
     onUnmounted(() => {
       call.leave();
 
-      videos.clear();
+      connectedUsers.clear();
     });
+
+    const handleLeaveRoom = async (id: string) => {
+      router.replace(`/project/${projectId}/rooms`);
+    }
 
     const handleAudioToggle = async () => {
       const stream = await call.getUserStream();
@@ -131,20 +159,15 @@ export default defineComponent({
       videocamOffOutline,
       handleAudioToggle,
       handleVideoToggle,
+      handleLeaveRoom,
       isAudioMuted,
       isVideoMuted,
-      videos,
+      connectedUsers,
     };
   },
 });
 </script>
 <style scoped>
-video {
-  height: 300px;
-  width: 400px;
-  object-fit: cover;
-  padding: 8px;
-}
 .main {
   display: flex;
   width: 100%;
@@ -161,5 +184,10 @@ video {
   flex-grow: 1;
   align-items: center;
   padding: 40px;
+}
+.controls {
+  background: #222428;
+  border-radius: 5px;
+  padding: 5px;
 }
 </style>

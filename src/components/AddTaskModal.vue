@@ -52,12 +52,12 @@
         <footer class="modal-footer">
           <ion-button
             type="button"
-            color="primary"
+            color="dark"
             @click="handleClick"
             v-if="task"
             >Save</ion-button
           >
-          <ion-button type="button" color="primary" @click="handleClick" v-else>
+          <ion-button type="button" color="dark" @click="handleClick" v-else>
             Create</ion-button
           >
         </footer>

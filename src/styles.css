@@ -1,0 +1,14 @@
+:root {
+   --primary: #222428; /* #a53468; 8*/
+   --secondery: #62487b;
+}
+
+.ion-color-dark {
+    --ion-color-dark: #334;
+}
+
+.ion-page {
+    margin: 5px;
+    background: var(--secondery);
+    border-radius: 5px;
+}

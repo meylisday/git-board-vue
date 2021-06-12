@@ -15,7 +15,7 @@
             :icon="create"
             size="large"
             class="action-icon"
-            color="primary"
+            color="dark"
           />
           <ion-icon
             @click="deleteTask(entity._id)"
@@ -28,8 +28,7 @@
       </ion-card-header>
 
       <ion-card-content>
-        Keep close to Nature's heart... and break clear away, once in awhile,
-        climb a mountain or spend a week in the woods. Wash your spirit clean.
+        {{ entity.description }}
       </ion-card-content>
     </ion-card>
   </div>
