@@ -2,6 +2,8 @@ import httpClient from "./httpClient";
 
 const PROJECTS = "/project";
 
+const getProjectById = (id: string) => httpClient.get(`${PROJECTS}/${id}`);
+
 const getAllProjects = (search?: string) =>
   httpClient.get(PROJECTS, { params: { search } });
 
@@ -12,4 +14,13 @@ const updateProject = (id: string, project: any) =>
 
 const deleteProject = (id: string) => httpClient.delete(`${PROJECTS}/${id}`);
 
-export { getAllProjects, deleteProject, createProject, updateProject };
+const fetchAssignedUsers = (id: string) => httpClient.get(`${PROJECTS}/${id}/assigned`);
+
+export {
+  getProjectById,
+  getAllProjects,
+  deleteProject,
+  createProject,
+  updateProject,
+  fetchAssignedUsers
+};

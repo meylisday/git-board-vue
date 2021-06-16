@@ -55,6 +55,22 @@
                 </ion-select>
               </ion-item>
             </ion-list>
+            <ion-list class="list-padding">
+              <ion-item>
+                <ion-label>Assignee</ion-label>
+                <ion-select v-model="selectedUser">
+                  <ion-select-option
+                    v-for="user in users"
+                    :key="user.user_i"
+                    :value="user.user_id"
+                  >
+                    <ion-label>
+                      {{ user.name }}
+                    </ion-label>
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
           </slot>
         </section>
 
@@ -76,6 +92,7 @@
 </template>
 
 <script lang="ts">
+import { VueAuth } from "@/auth";
 import {
   IonInput,
   IonTextarea,
@@ -88,7 +105,7 @@ import {
   IonTitle,
   IonIcon
 } from "@ionic/vue";
-import { defineComponent, computed, onMounted, ref } from "vue";
+import { defineComponent, computed, inject, ref } from "vue";
 import { useStore } from "vuex";
 export default defineComponent({
   props: ["task", "projectId"],
@@ -105,14 +122,19 @@ export default defineComponent({
     IonIcon
   },
   setup(props, { emit }) {
+    const auth = inject<VueAuth>("auth");
     const store = useStore();
     const listItems: Array<string> = ["backlog", "todo", "review", "done"];
     const selectedOption = ref(props.task?.status || "backlog");
     const title = ref(props.task?.title || "");
     const description = ref(props.task?.description || "");
+    const users = computed(() => store.getters.getAssignedUsers);
+    const selectedUser = ref(props.task?.assignee || "");
+
     const close = () => {
       emit("close");
     };
+
     const addTask = async () => {
       if (selectedOption.value && title.value) {
         await store.dispatch("createTaskAction", {
@@ -120,7 +142,9 @@ export default defineComponent({
           task: {
             title: title.value,
             description: description.value,
-            status: selectedOption.value
+            status: selectedOption.value,
+            assignee: selectedUser.value,
+            createdBy: auth?.user?.sub
           }
         });
         await store.dispatch("fetchTasks", { projectId: props.projectId });
@@ -137,7 +161,8 @@ export default defineComponent({
             ...props.task,
             title: title.value,
             description: description?.value,
-            status: selectedOption.value
+            status: selectedOption.value,
+            assignee: selectedUser.value
           }
         });
         await store.dispatch("fetchTasks", { projectId: props.projectId });
@@ -153,7 +178,9 @@ export default defineComponent({
       selectedOption,
       title,
       description,
-      handleClick
+      handleClick,
+      users,
+      selectedUser
     };
   }
 });

@@ -28,7 +28,30 @@
       </ion-card-header>
 
       <ion-card-content>
-        {{ entity.description }}
+        <p>{{ entity.description }}</p>
+
+        <hr />
+
+        <div v-if="createdBy">
+          <span>Created By:</span>
+          <ion-chip color="dark" outline>
+            <ion-avatar>
+              <img :src="createdBy?.picture" />
+            </ion-avatar>
+            <ion-label>{{ createdBy?.name }}</ion-label>
+          </ion-chip>
+        </div>
+
+        <div>
+          <span>Assignee:</span>
+          <ion-chip color="dark" outline v-if="assignee">
+            <ion-avatar>
+              <img :src="assignee?.picture" />
+            </ion-avatar>
+            <ion-label>{{ assignee?.name }}</ion-label>
+          </ion-chip>
+          <span v-else>Not assigned</span>
+        </div>
       </ion-card-content>
     </ion-card>
   </div>
@@ -36,6 +59,9 @@
 
 <script lang="ts">
 import {
+  IonChip,
+  IonAvatar,
+  IonLabel,
   IonCard,
   IonCardContent,
   IonCardTitle,
@@ -43,12 +69,15 @@ import {
   IonIcon
 } from "@ionic/vue";
 import { optionsOutline } from "ionicons/icons";
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import Modal from "@/components/AddTaskModal.vue";
 export default defineComponent({
   props: ["entity", "projectId"],
   components: {
+    IonChip,
+    IonAvatar,
+    IonLabel,
     IonCard,
     IonCardContent,
     IonCardTitle,
@@ -59,6 +88,20 @@ export default defineComponent({
   setup(props, { emit }) {
     const store = useStore();
     const isModalVisible = ref(false);
+    const assignedUsers = computed(() => store.getters.getAssignedUsers);
+
+    const assignee = computed(() =>
+      assignedUsers?.value.find(
+        (user: any) => props.entity?.assignee === user.user_id
+      )
+    );
+
+    const createdBy = computed(() =>
+      assignedUsers?.value.find(
+        (user: any) => props.entity?.createdBy === user.user_id
+      )
+    );
+
     const showModal = () => {
       isModalVisible.value = true;
     };
@@ -82,7 +125,9 @@ export default defineComponent({
       showModal,
       closeModal,
       isModalVisible,
-      deleteTask
+      deleteTask,
+      assignee,
+      createdBy
     };
   }
 });

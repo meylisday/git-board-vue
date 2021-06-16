@@ -17,7 +17,7 @@
         :is-open="isOpenRef"
         color="warning"
         message="To change task's status grag-and-drop card from one column to another"
-        :duration="30"
+        :duration="5000"
         @didDismiss="setOpen(false)"
       >
       </ion-toast>
@@ -27,12 +27,7 @@
         :projectId="projectId"
       />
       <ion-row>
-        <ion-col
-          size="12"
-          size-md
-          v-for="column in columns"
-          :key="column.key"
-        >
+        <ion-col size="12" size-md v-for="column in columns" :key="column.key">
           <ion-text color="light">
             <h1 class="text-centered">{{ column.key }}</h1>
           </ion-text>
@@ -59,14 +54,14 @@
           </draggable>
           <div class="add-column-item" @click="showModal">+</div>
         </ion-col>
-      </ion-row> 
+      </ion-row>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
 import { informationCircleOutline } from "ionicons/icons";
-import { defineComponent, computed, onMounted, ref } from "vue";
+import { defineComponent, computed, onMounted, onUnmounted, ref } from "vue";
 import { useStore } from "vuex";
 import draggable from "vuedraggable";
 import Task from "@/components/Task.vue";
@@ -108,10 +103,16 @@ export default defineComponent({
     const { projectId } = route.params;
     const isOpenRef = ref(true);
 
-    const setOpen = (state: boolean) => isOpenRef.value = state;
+    const setOpen = (state: boolean) => (isOpenRef.value = state);
 
     onMounted(() => {
+      store.dispatch("fetchAssignedUsersAction", projectId);
+      store.dispatch("fetchProjectById", projectId);
       store.dispatch("fetchTasks", { projectId: projectId });
+    });
+
+    onUnmounted(() => {
+      store.dispatch("clearProject");
     });
 
     const columns = computed(() => store.getters.getTasks);
@@ -129,9 +130,11 @@ export default defineComponent({
     const showModal = () => {
       isModalVisible.value = true;
     };
+
     const closeModal = () => {
       isModalVisible.value = false;
     };
+
     const handleChange = (e: any) => {
       store.dispatch("fetchTasks", {
         projectId: projectId,
