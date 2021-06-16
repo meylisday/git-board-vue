@@ -7,7 +7,7 @@
           <img :src="metadata?.picture" />
         </ion-avatar>
         <ion-label>
-          {{ metadata?.name }}
+          {{ metadata?.name || metadata?.nickname }}
         </ion-label>
       </ion-chip>
     </span>

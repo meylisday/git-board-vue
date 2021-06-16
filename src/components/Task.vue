@@ -28,7 +28,7 @@
       </ion-card-header>
 
       <ion-card-content>
-        <p>{{ entity.description }}</p>
+        <pre class="description">{{ entity.description }}</pre>
 
         <hr />
 
@@ -147,5 +147,9 @@ export default defineComponent({
 }
 .modal-backdrop {
   background-color: transparent;
+}
+.description {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 </style>

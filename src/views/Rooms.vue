@@ -16,12 +16,12 @@
         </ion-button>
       </div>
       <div class="rooms">
-        <RoomsList
+        <RoomsCard
           class="width"
           v-for="room in rooms"
           :key="room._id"
           :room="room"
-        ></RoomsList>
+        ></RoomsCard>
       </div>
     </ion-content>
   </ion-page>
@@ -30,8 +30,8 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-import { IonButton, IonPage, IonContent, IonList } from "@ionic/vue";
-import RoomsList from "@/components/RoomsList.vue";
+import { IonButton, IonPage, IonContent } from "@ionic/vue";
+import RoomsCard from "@/components/RoomsCard.vue";
 import Modal from "@/components/AddRoomModal.vue";
 import { useRoute } from "vue-router";
 
@@ -40,8 +40,8 @@ export default defineComponent({
     IonButton,
     IonPage,
     IonContent,
-    RoomsList,
-    Modal,
+    RoomsCard,
+    Modal
   },
   setup(props) {
     const store = useStore();
@@ -66,9 +66,9 @@ export default defineComponent({
       showModal,
       closeModal,
       projectId,
-      rooms,
+      rooms
     };
-  },
+  }
 });
 </script>
 <style scoped>

@@ -194,6 +194,6 @@ export default defineComponent({
   width: 100%;
 }
 .content {
-  --background: transparent;
+  --background: rgba(0, 0, 0, 0.1);
 }
 </style>

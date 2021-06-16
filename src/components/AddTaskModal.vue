@@ -35,7 +35,7 @@
             </ion-item>
             <ion-item>
               <ion-label position="floating">Description</ion-label>
-              <ion-textarea v-model="description"></ion-textarea>
+              <ion-textarea v-model="description" auto-grow="true" rows="5"></ion-textarea>
             </ion-item>
             <ion-list class="list-padding">
               <ion-item>
@@ -65,7 +65,7 @@
                     :value="user.user_id"
                   >
                     <ion-label>
-                      {{ user.name }}
+                      {{ user?.name }}
                     </ion-label>
                   </ion-select-option>
                 </ion-select>

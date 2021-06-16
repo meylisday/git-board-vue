@@ -18,13 +18,14 @@
         {{ project.tasks.length }} tasks
       </p>
       <p v-else>Have 1 task</p>
+      <p>{{ project.rooms.length }} room(s)</p>
     </ion-card-content>
     <div>
       <ion-chip color="dark" outline v-for="(user, index) in users" :key="index">
         <ion-avatar>
           <img :src="user.picture" />
         </ion-avatar>
-        <ion-label>{{ user.name }}</ion-label>
+        <ion-label>{{ user?.name }}</ion-label>
       </ion-chip>
     </div>
   </ion-card>

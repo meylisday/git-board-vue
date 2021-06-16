@@ -2,13 +2,6 @@
   <ion-card>
     <ion-card-header class="flex">
       <ion-card-title>{{ room.title }}</ion-card-title>
-      <ion-icon
-        name="close"
-        size="large"
-        class="action-icon"
-        color="danger"
-        @click="deleteRoom(room._id)"
-      ></ion-icon>
     </ion-card-header>
 
     <ion-card-content class="content">
@@ -18,15 +11,24 @@
         class="camera-icon"
         color="dark"
       ></ion-icon>
-      <ion-button expand="expand" color="dark" @click="joinRoom(room._id)">
-        Join
-      </ion-button>
+      <div>
+        <ion-button expand="expand" color="dark" @click="joinRoom(room._id)">
+          Join
+        </ion-button>
+        <ion-button
+          expand="expand"
+          color="danger"
+          @click="deleteRoom(room._id)"
+        >
+          Delete
+        </ion-button>
+      </div>
     </ion-card-content>
   </ion-card>
 </template>
 
 <script lang="ts">
-import { IonIcon, IonItem, IonButton } from "@ionic/vue";
+import { IonIcon, IonButton } from "@ionic/vue";
 import router from "@/router";
 import { peopleOutline } from "ionicons/icons";
 import { defineComponent } from "vue";

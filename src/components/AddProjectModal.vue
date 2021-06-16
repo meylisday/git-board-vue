@@ -46,7 +46,7 @@
                   :value="user.user_id"
                 >
                   <ion-label>
-                    {{ user.name }}
+                    {{ user?.name }}
                   </ion-label>
                 </ion-select-option>
               </ion-select>

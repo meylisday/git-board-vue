@@ -27,7 +27,7 @@
         <img :src="$auth.user.picture" />
       </ion-avatar>
       <ion-label>
-        {{ $auth.user?.given_name }} {{ $auth.user?.family_name }}
+        {{ $auth.user?.nickname }}
       </ion-label>
     </ion-chip>
   </nav>
