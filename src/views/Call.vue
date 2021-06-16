@@ -129,7 +129,7 @@ export default defineComponent({
 
     const handleLeaveRoom = async (id: string) => {
       router.replace(`/project/${projectId}/rooms`);
-    }
+    };
 
     const handleAudioToggle = async () => {
       const stream = await call.getUserStream();
@@ -137,7 +137,7 @@ export default defineComponent({
       isAudioMuted.value = !isAudioMuted.value;
 
       if (stream) {
-        stream.getAudioTracks()[0].enabled = !isAudioMuted.value;
+        stream.getAudioTracks()[0].enabled = isAudioMuted.value;
       }
     };
 
@@ -147,7 +147,7 @@ export default defineComponent({
       isVideoMuted.value = !isVideoMuted.value;
 
       if (stream) {
-        stream.getVideoTracks()[0].enabled = !isVideoMuted.value;
+        stream.getVideoTracks()[0].enabled = isVideoMuted.value;
       }
     };
 
@@ -162,9 +162,9 @@ export default defineComponent({
       handleLeaveRoom,
       isAudioMuted,
       isVideoMuted,
-      connectedUsers,
+      connectedUsers
     };
-  },
+  }
 });
 </script>
 <style scoped>
