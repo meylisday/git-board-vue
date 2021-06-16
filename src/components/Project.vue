@@ -1,5 +1,5 @@
 <template>
-  <ion-card>
+  <ion-card class="card">
     <ion-card-header class="flex">
       <ion-card-title>{{ project.title }}</ion-card-title>
       <ion-icon
@@ -12,6 +12,7 @@
 
     <ion-card-content>
       {{ project.description }}
+      <hr />
       <p v-if="project.tasks.length === 0">No tasks</p>
       <p v-else-if="project.tasks.length > 1">
         {{ project.tasks.length }} tasks
@@ -19,7 +20,7 @@
       <p v-else>Have 1 task</p>
     </ion-card-content>
     <div>
-      <ion-chip v-for="(user, index) in users" :key="index">
+      <ion-chip color="dark" outline v-for="(user, index) in users" :key="index">
         <ion-avatar>
           <img :src="user.picture" />
         </ion-avatar>
@@ -117,5 +118,8 @@ export default defineComponent({
   position: absolute;
   right: 0;
   top: 0;
+}
+.card {
+  padding: 10px 5px;
 }
 </style>

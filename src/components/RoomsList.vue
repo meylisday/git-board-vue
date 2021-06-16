@@ -1,27 +1,41 @@
 <template>
-  <ion-item>
-    <ion-label>{{ room.title }}</ion-label>
-    <ion-button expand="expand" color="dark" @click="joinRoom(room._id)"
-      >Join</ion-button
-    >
-    <ion-button expand="expand" color="danger" @click="deleteRoom(room._id)">
-      Delete
-    </ion-button>
-  </ion-item>
+  <ion-card>
+    <ion-card-header class="flex">
+      <ion-card-title>{{ room.title }}</ion-card-title>
+      <ion-icon
+        name="close"
+        size="large"
+        class="action-icon"
+        color="danger"
+        @click="deleteRoom(room._id)"
+      ></ion-icon>
+    </ion-card-header>
+
+    <ion-card-content class="content">
+      <ion-icon
+        :icon="peopleOutline"
+        size="large"
+        class="camera-icon"
+        color="dark"
+      ></ion-icon>
+      <ion-button expand="expand" color="dark" @click="joinRoom(room._id)">
+        Join
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 </template>
 
 <script lang="ts">
-import { IonLabel, IonItem, IonButton } from "@ionic/vue";
+import { IonIcon, IonItem, IonButton } from "@ionic/vue";
 import router from "@/router";
-import { create, menu } from "ionicons/icons";
+import { peopleOutline } from "ionicons/icons";
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 export default defineComponent({
   props: ["room"],
   components: {
-    IonLabel,
-    IonItem,
+    IonIcon,
     IonButton,
   },
   setup(props) {
@@ -39,10 +53,9 @@ export default defineComponent({
       router.push(`/project/${projectId}/rooms/${id}/call`);
     };
     return {
-      create,
-      menu,
       joinRoom,
       deleteRoom,
+      peopleOutline,
     };
   },
 });
@@ -59,9 +72,18 @@ export default defineComponent({
 .action-icon {
   cursor: pointer;
 }
+.camera-icon {
+  height: 10rem;
+  width: 10rem;
+}
 .my-custom-class {
   position: absolute;
   right: 0;
   top: 0;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>

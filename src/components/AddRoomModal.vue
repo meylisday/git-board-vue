@@ -17,7 +17,12 @@
             @click="close"
             aria-label="Close modal"
           >
-            x
+            <ion-icon
+              name="close"
+              class="action-icon"
+              size="large"
+              color="dark"
+            ></ion-icon>
           </button>
         </header>
 
@@ -41,7 +46,14 @@
 </template>
 
 <script lang="ts">
-import { IonInput, IonItem, IonLabel, IonButton, IonTitle } from "@ionic/vue";
+import {
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonButton,
+  IonTitle,
+  IonIcon
+} from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 export default defineComponent({
@@ -51,7 +63,8 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonButton,
-    IonTitle
+    IonTitle,
+    IonIcon
   },
   setup(props, { emit }) {
     const store = useStore();

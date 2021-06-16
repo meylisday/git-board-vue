@@ -12,42 +12,54 @@
         >Add task</ion-button
       >
     </div>
-    <ion-content>
-      <ion-text class="instruction">
-        <ion-icon :icon="informationCircleOutline" color="primary" />
-        <span>To change task's status grag-and-drop card from one column to another</span>
-      </ion-text>
-      <ion-grid class="width column">
-        <ion-row class="add-task-button">
-          <Modal
-            v-show="isModalVisible"
-            @close="closeModal"
-            :projectId="projectId"
-          />
-        </ion-row>
-        <ion-row class="column">
-          <ion-col
-            size="12"
-            class="column"
-            size-md
-            v-for="column in columns"
-            :key="column.key"
-          >
+    <ion-content class="content">
+      <ion-toast
+        :is-open="isOpenRef"
+        color="warning"
+        message="To change task's status grag-and-drop card from one column to another"
+        :duration="30"
+        @didDismiss="setOpen(false)"
+      >
+      </ion-toast>
+      <Modal
+        v-show="isModalVisible"
+        @close="closeModal"
+        :projectId="projectId"
+      />
+      <ion-row>
+        <ion-col
+          size="12"
+          size-md
+          v-for="column in columns"
+          :key="column.key"
+        >
+          <ion-text color="light">
             <h1 class="text-centered">{{ column.key }}</h1>
-            <draggable
-              v-model="column.items"
-              group="tasks"
-              item-key="_id"
-              class="column overflow column-hover"
-              @change="updateStatus($event, column.key)"
-            >
-              <template #item="{element}">
-                <Task :entity="element" :projectId="projectId" />
-              </template>
-            </draggable>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col
+          size="12"
+          size-md
+          class="column-hover"
+          v-for="column in columns"
+          :key="column.key"
+        >
+          <draggable
+            v-model="column.items"
+            group="tasks"
+            item-key="_id"
+            class="draggable"
+            @change="updateStatus($event, column.key)"
+          >
+            <template #item="{element}">
+              <Task :entity="element" :projectId="projectId" />
+            </template>
+          </draggable>
+          <div class="add-column-item" @click="showModal">+</div>
+        </ion-col>
+      </ion-row> 
     </ion-content>
   </ion-page>
 </template>
@@ -59,11 +71,11 @@ import { useStore } from "vuex";
 import draggable from "vuedraggable";
 import Task from "@/components/Task.vue";
 import {
+  IonText,
   IonCol,
   IonGrid,
-  IonIcon,
-  IonText,
   IonRow,
+  IonToast,
   IonButton,
   IonPage,
   IonContent,
@@ -78,22 +90,25 @@ export default defineComponent({
     draggable,
     Task,
     IonCol,
-    IonGrid,
-    IonIcon,
     IonText,
+    // IonGrid,
     IonRow,
     Modal,
     IonButton,
     IonPage,
     IonContent,
     IonSearchbar,
-    IonToolbar
+    IonToolbar,
+    IonToast
   },
   setup(props) {
     const store = useStore();
     const isModalVisible = ref(false);
     const route = useRoute();
     const { projectId } = route.params;
+    const isOpenRef = ref(true);
+
+    const setOpen = (state: boolean) => isOpenRef.value = state;
 
     onMounted(() => {
       store.dispatch("fetchTasks", { projectId: projectId });
@@ -132,14 +147,16 @@ export default defineComponent({
       closeModal,
       projectId,
       handleChange,
-      informationCircleOutline
+      informationCircleOutline,
+      setOpen,
+      isOpenRef
     };
   }
 });
 </script>
 <style scoped>
-.column {
-  height: 100%;
+.content {
+  --background: transparent;
 }
 .add-task-button {
   display: flex;
@@ -172,17 +189,30 @@ export default defineComponent({
   width: 500px;
   --background: transparent;
 }
-.instruction {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 5px;
-}
 .column-hover {
   background: rgba(0,0,0, 0.05);
-  padding: 5px 0;
+  margin: 0 5px;
+
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* justify-items: center; */
+  align-items: center;
 }
 .column-hover:hover {
   background: rgba(0,0,0, 0.1);
+}
+.add-column-item {
+  font-size: 76px;
+  text-align: center;
+  opacity: 0.5;
+  position: absolute;
+  bottom: 0;
+  cursor: pointer;
+}
+.draggable {
+  height: 100%;
+  padding-bottom: 78px;
+  width: 100%;
 }
 </style>

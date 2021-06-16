@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content>
+    <ion-content class="content">
       <div class="main">
         <div class="video-grid">
           <VideoCard muted="true" :stream="localVideo" :metadata="{ picture: $auth.user?.picture, name: 'You' }"/>
@@ -189,5 +189,11 @@ export default defineComponent({
   background: #222428;
   border-radius: 5px;
   padding: 5px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+.content {
+  --background: transparent;
 }
 </style>

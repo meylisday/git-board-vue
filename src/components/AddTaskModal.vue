@@ -9,8 +9,8 @@
       >
         <header class="modal-header" id="modalTitle">
           <slot name="header">
-            <ion-title v-if="task">Updating task</ion-title>
-            <ion-title v-else>Adding task</ion-title>
+            <ion-title color="dark" v-if="task">Updating task</ion-title>
+            <ion-title color="dark" v-else>Adding task</ion-title>
           </slot>
           <button
             type="button"
@@ -18,7 +18,12 @@
             @click="close"
             aria-label="Close modal"
           >
-            x
+            <ion-icon
+              name="close"
+              class="action-icon"
+              size="large"
+              color="dark"
+            ></ion-icon>
           </button>
         </header>
 
@@ -27,6 +32,10 @@
             <ion-item>
               <ion-label position="floating">Title</ion-label>
               <ion-input v-model="title"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Description</ion-label>
+              <ion-textarea v-model="description"></ion-textarea>
             </ion-item>
             <ion-list class="list-padding">
               <ion-item>
@@ -69,13 +78,15 @@
 <script lang="ts">
 import {
   IonInput,
+  IonTextarea,
   IonItem,
   IonLabel,
   IonList,
   IonSelect,
   IonSelectOption,
   IonButton,
-  IonTitle
+  IonTitle,
+  IonIcon
 } from "@ionic/vue";
 import { defineComponent, computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
@@ -83,19 +94,22 @@ export default defineComponent({
   props: ["task", "projectId"],
   components: {
     IonInput,
+    IonTextarea,
     IonItem,
     IonLabel,
     IonList,
     IonSelect,
     IonSelectOption,
     IonButton,
-    IonTitle
+    IonTitle,
+    IonIcon
   },
   setup(props, { emit }) {
     const store = useStore();
     const listItems: Array<string> = ["backlog", "todo", "review", "done"];
     const selectedOption = ref(props.task?.status || "backlog");
     const title = ref(props.task?.title || "");
+    const description = ref(props.task?.description || "");
     const close = () => {
       emit("close");
     };
@@ -105,6 +119,7 @@ export default defineComponent({
           projectId: props.projectId,
           task: {
             title: title.value,
+            description: description.value,
             status: selectedOption.value
           }
         });
@@ -121,6 +136,7 @@ export default defineComponent({
           task: {
             ...props.task,
             title: title.value,
+            description: description?.value,
             status: selectedOption.value
           }
         });
@@ -136,6 +152,7 @@ export default defineComponent({
       listItems,
       selectedOption,
       title,
+      description,
       handleClick
     };
   }

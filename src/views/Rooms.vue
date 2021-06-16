@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content>
+    <ion-content class="content">
       <Modal
         v-show="isModalVisible"
         @close="closeModal"
@@ -15,14 +15,14 @@
           >Add room
         </ion-button>
       </div>
-      <ion-list>
+      <div class="rooms">
         <RoomsList
           class="width"
           v-for="room in rooms"
           :key="room._id"
           :room="room"
         ></RoomsList>
-      </ion-list>
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -41,7 +41,6 @@ export default defineComponent({
     IonPage,
     IonContent,
     RoomsList,
-    IonList,
     Modal,
   },
   setup(props) {
@@ -91,5 +90,12 @@ export default defineComponent({
 }
 .search-width {
   width: 500px;
+}
+.rooms {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.content {
+  --background: transparent;
 }
 </style>
