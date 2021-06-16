@@ -3,7 +3,11 @@
     <ion-content class="content">
       <div class="main">
         <div class="video-grid">
-          <VideoCard muted="true" :stream="localVideo" :metadata="{ picture: $auth.user?.picture, name: 'You' }"/>
+          <VideoCard
+            :muted="true"
+            :stream="localVideo"
+            :metadata="{ picture: $auth.user?.picture, name: 'You' }"
+          />
 
           <VideoCard
             v-for="[key, value] in connectedUsers"
@@ -95,9 +99,7 @@ export default defineComponent({
         return;
       }
 
-      stream.getAudioTracks()[0].enabled = false
-
-      isAudioMuted.value = !stream.getAudioTracks()[0].enabled;
+      stream.getAudioTracks()[0].enabled = !isAudioMuted.value;
       isVideoMuted.value = !stream.getVideoTracks()[0].enabled;
     });
 
@@ -137,7 +139,7 @@ export default defineComponent({
       isAudioMuted.value = !isAudioMuted.value;
 
       if (stream) {
-        stream.getAudioTracks()[0].enabled = isAudioMuted.value;
+        stream.getAudioTracks()[0].enabled = !isAudioMuted.value;
       }
     };
 
@@ -147,7 +149,7 @@ export default defineComponent({
       isVideoMuted.value = !isVideoMuted.value;
 
       if (stream) {
-        stream.getVideoTracks()[0].enabled = isVideoMuted.value;
+        stream.getVideoTracks()[0].enabled = !isVideoMuted.value;
       }
     };
 

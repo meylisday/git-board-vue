@@ -1,6 +1,6 @@
 <template>
   <div class="preview">
-    <video autoplay :srcObject.prop="stream" muted="muted" />
+    <video autoplay :srcObject.prop="stream" :muted="muted" />
     <span class="info" v-if="metadata">
       <ion-chip color="light" outline>
         <ion-avatar>
@@ -14,19 +14,17 @@
   </div>
 </template>
 <script lang="ts">
-import {
-  IonAvatar,
-  IonChip,
-  IonLabel
-} from "@ionic/vue";
+import { IonAvatar, IonChip, IonLabel } from "@ionic/vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  components: {},
+  components: {
+    IonAvatar,
+    IonChip,
+    IonLabel
+  },
   props: ["stream", "muted", "metadata"],
-  setup(props) {
-    console.log(props.metadata)
-
+  setup() {
     return {
       ops: 4,
     };
