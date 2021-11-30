@@ -41,6 +41,7 @@
           v-for="column in columns"
           :key="column.key"
         >
+          <div class="add-column-item" @click="showModal">+</div>
           <draggable
             v-model="column.items"
             group="tasks"
@@ -52,7 +53,6 @@
               <Task :entity="element" :projectId="projectId" />
             </template>
           </draggable>
-          <div class="add-column-item" @click="showModal">+</div>
         </ion-col>
       </ion-row>
     </ion-content>
@@ -193,29 +193,25 @@ export default defineComponent({
   --background: transparent;
 }
 .column-hover {
-  background: rgba(0,0,0, 0.05);
+  background: rgba(0, 0, 0, 0.05);
   margin: 0 5px;
-
-  height: 100%;
   display: flex;
   flex-direction: column;
-  /* justify-items: center; */
   align-items: center;
 }
 .column-hover:hover {
-  background: rgba(0,0,0, 0.1);
+  background: rgba(0, 0, 0, 0.1);
 }
 .add-column-item {
   font-size: 76px;
   text-align: center;
   opacity: 0.5;
-  position: absolute;
   bottom: 0;
   cursor: pointer;
 }
 .draggable {
   height: 100%;
-  padding-bottom: 78px;
+  padding-top: 0;
   width: 100%;
 }
 </style>
