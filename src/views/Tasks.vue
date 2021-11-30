@@ -21,11 +21,7 @@
         @didDismiss="setOpen(false)"
       >
       </ion-toast>
-      <Modal
-        v-show="isModalVisible"
-        @close="closeModal"
-        :projectId="projectId"
-      />
+      <Modal v-if="isModalVisible" @close="closeModal" :projectId="projectId" />
       <ion-row>
         <ion-col size="12" size-md v-for="column in columns" :key="column.key">
           <ion-text color="light">

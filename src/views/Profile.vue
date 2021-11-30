@@ -18,11 +18,21 @@
 <script lang="ts">
 import { VueAuth } from "@/auth";
 import { defineComponent, inject } from "vue";
-import { IonPage } from "@ionic/vue";
+import {
+  IonPage,
+  IonCardHeader,
+  IonCardContent,
+  IonAvatar,
+  IonCard
+} from "@ionic/vue";
 
 export default defineComponent({
   components: {
-    IonPage
+    IonPage,
+    IonCard,
+    IonCardHeader,
+    IonCardContent,
+    IonAvatar
   },
   setup() {
     const auth = inject<VueAuth>("auth");

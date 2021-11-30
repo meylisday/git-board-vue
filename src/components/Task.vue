@@ -1,7 +1,7 @@
 <template>
   <div class="width">
     <Modal
-      v-show="isModalVisible"
+      v-if="isModalVisible"
       @close="closeModal"
       :task="entity"
       :projectId="projectId"
