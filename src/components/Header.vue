@@ -58,7 +58,7 @@ export default defineComponent({
     IonAvatar,
     IonChip,
     IonLabel,
-    IonIcon,
+    IonIcon
   },
   name: "Header",
   setup() {
@@ -152,7 +152,7 @@ export default defineComponent({
       openPopover,
       chevronForwardOutline,
     };
-  },
+  }
 });
 </script>
 
