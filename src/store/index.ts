@@ -5,7 +5,7 @@ import ProjectModule from "./modules/projects.module";
 import UsersModule from "./modules/users.module";
 import RoomsModule from "./modules/rooms.module";
 
-export default createStore({
+const store = createStore({
   state: {},
   mutations: {},
   actions: {},
@@ -16,3 +16,5 @@ export default createStore({
     RoomsModule
   }
 });
+
+export default store;

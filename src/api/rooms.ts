@@ -11,4 +11,7 @@ const createRoom = (projectId: string, room: any) =>
 const deleteRoom = (projectId: string, roomId: string) =>
   httpClient.put(`${PROJECT}/${projectId}/room/${roomId}/delete`);
 
-export { getAllRooms, createRoom, deleteRoom };
+const getRoomById = (projectId: string, roomId: string) =>
+  httpClient.get(`${PROJECT}/${projectId}/room/${roomId}`);
+
+export { getAllRooms, createRoom, deleteRoom, getRoomById };

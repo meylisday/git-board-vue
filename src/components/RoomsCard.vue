@@ -28,7 +28,14 @@
 </template>
 
 <script lang="ts">
-import { IonIcon, IonButton } from "@ionic/vue";
+import {
+  IonIcon,
+  IonButton,
+  IonCardTitle,
+  IonCardHeader,
+  IonCardContent,
+  IonCard
+} from "@ionic/vue";
 import router from "@/router";
 import { peopleOutline } from "ionicons/icons";
 import { defineComponent } from "vue";
@@ -39,6 +46,10 @@ export default defineComponent({
   components: {
     IonIcon,
     IonButton,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardTitle
   },
   setup(props) {
     const store = useStore();
@@ -47,7 +58,7 @@ export default defineComponent({
     const deleteRoom = async (id: string) => {
       await store.dispatch("deleteRoomAction", {
         projectId: projectId,
-        roomId: id,
+        roomId: id
       });
       await store.dispatch("fetchRooms", { projectId: projectId });
     };
@@ -57,9 +68,9 @@ export default defineComponent({
     return {
       joinRoom,
       deleteRoom,
-      peopleOutline,
+      peopleOutline
     };
-  },
+  }
 });
 </script>
 

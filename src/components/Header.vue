@@ -1,26 +1,29 @@
 <template>
   <nav class="header">
     <div class="links">
-      <ion-button
-        router-link="/"
-        routerDirection="root"
-        fill="clear"
-        color="light"
+      <div
+        class="link"
+        v-for="(breadcrumb, idx) in breadcrumbs"
+        :key="breadcrumb.name"
       >
-        Home
-      </ion-button>
+        <ion-button
+          :router-link="breadcrumb.href"
+          :disabled="idx === breadcrumbs.length - 1"
+          routerDirection="root"
+          fill="clear"
+          color="light"
+        >
+          {{ breadcrumb.label }}
+        </ion-button>
 
-      <ion-icon
-        v-if="project"
-        :icon="chevronForwardOutline"
-        class="action-icon"
-        color="light"
-        size="small"
-      ></ion-icon>
-
-      <ion-button fill="clear" color="light" disabled>
-        {{ project?.title }}
-      </ion-button>
+        <ion-icon
+          v-if="idx !== breadcrumbs.length - 1"
+          :icon="chevronForwardOutline"
+          class="action-icon"
+          color="light"
+          size="small"
+        ></ion-icon>
+      </div>
     </div>
     <ion-chip @click="openPopover" color="light" outline>
       <ion-avatar>
@@ -35,15 +38,16 @@
 
 <script lang="ts">
 import { VueAuth } from "@/auth";
-import { inject, computed, defineComponent } from "vue";
+import { inject, computed, defineComponent, onMounted, watchEffect } from "vue";
 import { useStore } from "vuex";
+import { useRoute, useRouter } from "vue-router";
 import {
   IonButton,
   IonAvatar,
   IonChip,
   IonIcon,
   popoverController,
-  IonLabel
+  IonLabel,
 } from "@ionic/vue";
 import { chevronForwardOutline } from "ionicons/icons";
 import Popover from "./UserPopover.vue";
@@ -54,13 +58,78 @@ export default defineComponent({
     IonAvatar,
     IonChip,
     IonLabel,
-    IonIcon
+    IonIcon,
   },
   name: "Header",
   setup() {
     const auth = inject<VueAuth>("auth");
     const store = useStore();
+    const route = useRoute();
+    const router = useRouter();
+
+    onMounted(() => {
+      if (route.params.projectId) {
+        store.dispatch("fetchProjectById", route.params.projectId);
+      }
+    });
+
     const project = computed(() => store.getters.getProject);
+
+    watchEffect(() => {
+      if (
+        route.params.projectId &&
+        (!project?.value || project.value._id !== route.params.projectId)
+      ) {
+        return store.dispatch("fetchProjectById", route.params.projectId);
+      }
+    });
+
+    const breadcrumbs = computed(() => {
+      const result: any = [
+        {
+          label: "Home",
+          ...router.resolve({
+            name: "GeneralGrid"
+          })
+        }
+      ];
+
+      if (project.value) {
+        if (route.params.roomId) {
+          result.push({
+            label: `${project.value.title}'s Rooms`,
+            ...router.resolve({
+              name: "Rooms",
+              params: { projectId: project.value._id }
+            })
+          });
+          result.push({
+            label: project.value?.rooms.find(
+              (room: any) => room._id === route.params.roomId
+            ).title,
+            ...router.resolve({
+              name: "Call",
+              params: {
+                projectId: project.value._id,
+                roomId: route.params.roomId
+              }
+            })
+          });
+        } else {
+          result.push({
+            label: project.value.title,
+            ...router.resolve({
+              name: "Projects",
+              params: { projectId: project.value._id }
+            })
+          });
+        }
+      }
+
+      console.log(result);
+
+      return result;
+    });
 
     const openPopover = async (ev: Event) => {
       const popover = await popoverController.create({
@@ -71,19 +140,19 @@ export default defineComponent({
         componentProps: {
           onClick: () => {
             popover.dismiss();
-          }
-        }
+          },
+        },
       });
       return popover.present();
     };
 
     return {
       project,
-      auth,
+      breadcrumbs,
       openPopover,
-      chevronForwardOutline
+      chevronForwardOutline,
     };
-  }
+  },
 });
 </script>
 
@@ -103,6 +172,9 @@ export default defineComponent({
   color: black;
 }
 .links {
+  display: flex;
+}
+.link {
   display: flex;
   flex-direction: row;
   align-items: center;
