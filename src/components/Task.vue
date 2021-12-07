@@ -8,23 +8,25 @@
     />
     <ion-card>
       <ion-card-header class="flex">
-        <ion-card-title>
+        <ion-card-title class="card-header">
           <span> {{ entity.slug }} </span>: {{ entity.title }}
         </ion-card-title>
-        <ion-icon
-          @click="updateTask"
-          :icon="optionsOutline"
-          size="large"
-          class="action-icon"
-          color="dark"
-        />
-        <ion-icon
-          @click="deleteTask(entity._id)"
-          name="close"
-          size="large"
-          class="action-icon"
-          color="danger"
-        ></ion-icon>
+        <div class="icons">
+          <ion-icon
+            @click="updateTask"
+            :icon="optionsOutline"
+            size="large"
+            class="action-icon"
+            color="dark"
+          />
+          <ion-icon
+            @click="deleteTask(entity._id)"
+            name="close"
+            size="large"
+            class="action-icon"
+            color="danger"
+          ></ion-icon>
+        </div>
       </ion-card-header>
 
       <ion-card-content>
@@ -142,8 +144,13 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
 }
+.card-header {
+  width: 20rem;
+}
 .action-icon {
   cursor: pointer;
+  height: 1.5rem;
+  width: 1.5rem;
 }
 .modal-backdrop {
   background-color: transparent;
