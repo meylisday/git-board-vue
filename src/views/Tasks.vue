@@ -189,6 +189,7 @@ export default defineComponent({
   --background: transparent;
 }
 .column-hover {
+  width: 20rem;
   background: rgba(0, 0, 0, 0.05);
   margin: 0 5px;
   display: flex;
