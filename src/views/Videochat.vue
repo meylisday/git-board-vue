@@ -47,7 +47,7 @@ export default defineComponent({
     });
 
     const handleStartCall = async () => {
-      console.log(await webRTCInterface.createOffer());
+      await webRTCInterface.createOffer();
     };
 
     return {

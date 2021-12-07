@@ -24,6 +24,14 @@ const getters = {
   }
 };
 
+const utils = {
+  groupTasksByStatus: (tasks: any) =>
+    ["backlog", "todo", "review", "done"].map(key => ({
+      key,
+      items: groupBy(tasks, "status")[key] || []
+    }))
+};
+
 const actions = {
   async fetchTasks(
     { commit }: ActionContext<State, RootState>,
@@ -31,11 +39,8 @@ const actions = {
   ) {
     try {
       const response = await getAllTasks(payload.projectId, payload.search);
+      const tasks = utils.groupTasksByStatus(response.data.tasks);
 
-      const tasks = ["backlog", "todo", "review", "done"].map(key => ({
-        key,
-        items: groupBy(response.data.tasks, "status")[key] || []
-      }));
       commit("setTasks", tasks);
     } catch (error) {
       // handle the error here
@@ -45,7 +50,14 @@ const actions = {
     { commit }: ActionContext<State, RootState>,
     payload: any
   ) {
-    await updateTaskStatus(payload.projectId, payload.taskId, payload.status);
+    const response = await updateTaskStatus(
+      payload.projectId,
+      payload.taskId,
+      payload.status
+    );
+    const tasks = utils.groupTasksByStatus(response.data.tasks);
+
+    commit("setTasks", tasks);
   },
   async createTaskAction(
     { commit }: ActionContext<State, RootState>,

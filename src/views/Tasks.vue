@@ -113,6 +113,8 @@ export default defineComponent({
 
     const columns = computed(() => store.getters.getTasks);
 
+    console.log(columns);
+
     const updateStatus = ({ added }: any, status: string) => {
       if (added) {
         store.dispatch("updateTaskStatusAction", {

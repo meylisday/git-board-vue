@@ -50,7 +50,7 @@
                   <ion-select-option
                     v-for="(item, index) in listItems"
                     :key="index"
-                    :value="item"
+                    :value="selectedOption.value || item"
                     >{{ item }}</ion-select-option
                   >
                 </ion-select>
@@ -131,7 +131,7 @@ export default defineComponent({
     const description = ref(props.task?.description || "");
     const users = computed(() => store.getters.getAssignedUsers);
     const selectedUser = ref(props.task?.assignee || "");
-
+//console.log(props.task?.status);
     const close = () => {
       emit("close");
     };

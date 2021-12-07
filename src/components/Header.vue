@@ -125,9 +125,6 @@ export default defineComponent({
           });
         }
       }
-
-      console.log(result);
-
       return result;
     });
 
@@ -140,8 +137,8 @@ export default defineComponent({
         componentProps: {
           onClick: () => {
             popover.dismiss();
-          },
-        },
+          }
+        }
       });
       return popover.present();
     };
