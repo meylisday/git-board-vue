@@ -50,7 +50,7 @@
                   <ion-select-option
                     v-for="(item, index) in listItems"
                     :key="index"
-                    :value="selectedOption.value || item"
+                    :value="item"
                     >{{ item }}</ion-select-option
                   >
                 </ion-select>
