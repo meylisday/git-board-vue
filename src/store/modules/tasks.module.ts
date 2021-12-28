@@ -8,7 +8,7 @@ import {
   deleteTask
 } from "../../api/tasks";
 import { RootState } from "../types";
-import { groupBy } from "lodash-es";
+import { groupBy, sortBy } from "lodash-es";
 
 type State = {
   tasks: any[];
@@ -28,7 +28,7 @@ const utils = {
   groupTasksByStatus: (tasks: any) =>
     ["backlog", "todo", "review", "done"].map(key => ({
       key,
-      items: groupBy(tasks, "status")[key] || []
+      items: sortBy(groupBy(tasks, "status")[key] || [], "order")
     }))
 };
 
@@ -48,13 +48,9 @@ const actions = {
   },
   async updateTaskStatusAction(
     { commit }: ActionContext<State, RootState>,
-    payload: any
+    { projectId, taskId, ...payload }: any
   ) {
-    const response = await updateTaskStatus(
-      payload.projectId,
-      payload.taskId,
-      payload.status
-    );
+    const response = await updateTaskStatus(projectId, taskId, payload);
     const tasks = utils.groupTasksByStatus(response.data.tasks);
 
     commit("setTasks", tasks);

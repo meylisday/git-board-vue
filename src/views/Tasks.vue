@@ -112,12 +112,15 @@ export default defineComponent({
     });
 
     const columns = computed(() => store.getters.getTasks);
+    console.log(columns);
 
     const updateStatus = ({ added }: any, status: string) => {
+      console.log(added?.newIndex);
       if (added) {
         store.dispatch("updateTaskStatusAction", {
           projectId: projectId,
           taskId: added.element._id,
+          order: added?.newIndex || 0,
           status
         });
       }

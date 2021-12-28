@@ -6,7 +6,7 @@
       :task="entity"
       :projectId="projectId"
     />
-    <ion-card>
+    <ion-card class="pointer">
       <ion-card-header class="flex">
         <ion-card-title class="card-header">
           <span> {{ entity.slug }} </span>: {{ entity.title }}
@@ -31,6 +31,10 @@
 
       <ion-card-content>
         <pre class="description">{{ entity.description }}</pre>
+
+        <hr />
+
+        <span>{{entity.order}}</span>
 
         <hr />
 
@@ -158,5 +162,8 @@ export default defineComponent({
 .description {
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+.pointer {
+  cursor: grab;
 }
 </style>
