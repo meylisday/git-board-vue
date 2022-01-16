@@ -112,10 +112,8 @@ export default defineComponent({
     });
 
     const columns = computed(() => store.getters.getTasks);
-    console.log(columns);
 
     const updateStatus = ({ added }: any, status: string) => {
-      console.log(added?.newIndex);
       if (added) {
         store.dispatch("updateTaskStatusAction", {
           projectId: projectId,
@@ -167,9 +165,6 @@ export default defineComponent({
 }
 .show-modal-button {
   width: 100px;
-}
-.modal-backdrop {
-  background-color: transparent;
 }
 .width {
   width: 100%;

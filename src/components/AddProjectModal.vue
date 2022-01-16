@@ -1,74 +1,78 @@
 <template>
-  <transition name="modal-fade">
-    <div class="modal-backdrop">
-      <div
-        class="modal"
-        role="dialog"
-        aria-labelledby="modalTitle"
-        aria-describedby="modalDescription"
-      >
-        <header class="modal-header" id="modalTitle">
-          <slot name="header">
-            <ion-title color="dark" v-if="project">Updating project</ion-title>
-            <ion-title color="dark" v-else>Adding project</ion-title>
-          </slot>
-          <button
-            type="button"
-            class="btn-close"
-            @click="close"
-            aria-label="Close modal"
-          >
-            <ion-icon
-              name="close"
-              class="action-icon"
-              size="large"
+  <Teleport to="#teleport-target">
+    <transition name="modal-fade">
+      <div class="modal-backdrop">
+        <div
+          class="modal"
+          role="dialog"
+          aria-labelledby="modalTitle"
+          aria-describedby="modalDescription"
+        >
+          <header class="modal-header" id="modalTitle">
+            <slot name="header">
+              <ion-title color="dark" v-if="project"
+                >Updating project</ion-title
+              >
+              <ion-title color="dark" v-else>Adding project</ion-title>
+            </slot>
+            <button
+              type="button"
+              class="btn-close"
+              @click="close"
+              aria-label="Close modal"
+            >
+              <ion-icon
+                name="close"
+                class="action-icon"
+                size="large"
+                color="dark"
+              ></ion-icon>
+            </button>
+          </header>
+
+          <section class="modal-body" id="modalDescription">
+            <slot name="body">
+              <ion-item>
+                <ion-label position="floating">Title</ion-label>
+                <ion-input v-model="title"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Description</ion-label>
+                <ion-textarea v-model="description"></ion-textarea>
+              </ion-item>
+              <ion-item>
+                <ion-label>Select</ion-label>
+                <ion-select multiple="true" v-model="selectedUsers">
+                  <ion-select-option
+                    v-for="user in users"
+                    :key="user.user_i"
+                    :value="user.user_id"
+                  >
+                    <ion-label>
+                      {{ user?.name }}
+                    </ion-label>
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </slot>
+          </section>
+
+          <footer class="modal-footer">
+            <ion-button
+              type="button"
               color="dark"
-            ></ion-icon>
-          </button>
-        </header>
-
-        <section class="modal-body" id="modalDescription">
-          <slot name="body">
-            <ion-item>
-              <ion-label position="floating">Title</ion-label>
-              <ion-input v-model="title"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Description</ion-label>
-              <ion-textarea v-model="description"></ion-textarea>
-            </ion-item>
-            <ion-item>
-              <ion-label>Select</ion-label>
-              <ion-select multiple="true" v-model="selectedUsers">
-                <ion-select-option
-                  v-for="user in users"
-                  :key="user.user_i"
-                  :value="user.user_id"
-                >
-                  <ion-label>
-                    {{ user?.name }}
-                  </ion-label>
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-          </slot>
-        </section>
-
-        <footer class="modal-footer">
-          <ion-button
-            type="button"
-            color="dark"
-            @click="handleClick"
-            v-if="project"
-            >Save</ion-button
-          >
-          <ion-button type="button" color="dark" @click="handleClick" v-else>
-            Create</ion-button
-          >
-        </footer>
+              @click="handleClick"
+              v-if="project"
+              >Save</ion-button
+            >
+            <ion-button type="button" color="dark" @click="handleClick" v-else>
+              Create</ion-button
+            >
+          </footer>
+        </div>
       </div>
-    </div>
-  </transition>
+    </transition>
+  </Teleport>
 </template>
 
 <script lang="ts">
@@ -80,7 +84,7 @@ import {
   IonTitle,
   IonTextarea,
   IonSelectOption,
-  IonSelect
+  IonSelect,
 } from "@ionic/vue";
 import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
@@ -94,7 +98,7 @@ export default defineComponent({
     IonTitle,
     IonTextarea,
     IonSelectOption,
-    IonSelect
+    IonSelect,
   },
   setup(props, { emit }) {
     const store = useStore();
@@ -113,8 +117,8 @@ export default defineComponent({
           project: {
             title: title.value,
             description: description.value,
-            users: selectedUsers.value
-          }
+            users: selectedUsers.value,
+          },
         });
         await store.dispatch("fetchProjects");
         emit("close");
@@ -128,8 +132,8 @@ export default defineComponent({
             ...props.project,
             title: title.value,
             description: description.value,
-            users: selectedUsers.value
-          }
+            users: selectedUsers.value,
+          },
         });
         await store.dispatch("fetchProjects");
         emit("close");
@@ -144,32 +148,22 @@ export default defineComponent({
       handleClick,
       description,
       users,
-      selectedUsers
+      selectedUsers,
     };
-  }
+  },
 });
 </script>
 
 <style>
 .modal-backdrop {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 2px 2px 20px 1px;
+  pointer-events: auto;
 }
 
 .modal {
   background: #ffffff;
-  box-shadow: 2px 2px 20px 1px;
-  overflow-x: auto;
-  display: flex;
-  flex-direction: column;
 }
 
 .modal-header,
@@ -192,7 +186,7 @@ export default defineComponent({
 .modal-body {
   position: relative;
   padding: 2rem;
-  width: 350px;
+  width: 70vw;
 }
 
 .btn-close {

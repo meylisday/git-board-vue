@@ -1,11 +1,7 @@
 <template>
   <ion-page>
     <ion-content class="content">
-      <Modal
-        v-show="isModalVisible"
-        @close="closeModal"
-        :projectId="projectId"
-      />
+      <Modal v-if="isModalVisible" @close="closeModal" :projectId="projectId" />
       <div class="text-align-end">
         <ion-button
           expand="expand"
@@ -41,7 +37,7 @@ export default defineComponent({
     IonPage,
     IonContent,
     RoomsCard,
-    Modal
+    Modal,
   },
   setup(props) {
     const store = useStore();
@@ -66,9 +62,9 @@ export default defineComponent({
       showModal,
       closeModal,
       projectId,
-      rooms
+      rooms,
     };
-  }
+  },
 });
 </script>
 <style scoped>
@@ -84,9 +80,6 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: flex-end;
-}
-.modal-backdrop {
-  background-color: transparent;
 }
 .search-width {
   width: 500px;
