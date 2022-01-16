@@ -117,9 +117,6 @@ export default defineComponent({
   justify-content: space-between;
   margin: 10px 0;
 }
-.modal-backdrop {
-  background-color: transparent;
-}
 .search-width {
   width: 500px;
   --background: transparent;

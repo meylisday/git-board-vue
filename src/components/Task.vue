@@ -156,9 +156,6 @@ export default defineComponent({
   height: 1.5rem;
   width: 1.5rem;
 }
-.modal-backdrop {
-  background-color: transparent;
-}
 .description {
   white-space: pre-wrap;
   word-wrap: break-word;

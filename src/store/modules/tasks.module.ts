@@ -5,7 +5,10 @@ import {
   updateTaskStatus,
   createTask,
   updateTask,
-  deleteTask
+  deleteTask,
+  commentTask,
+  deleteComment,
+  updateComment
 } from "../../api/tasks";
 import { RootState } from "../types";
 import { groupBy, sortBy } from "lodash-es";
@@ -72,7 +75,25 @@ const actions = {
     payload: any
   ) {
     await deleteTask(payload.projectId, payload.taskId);
-  }
+  },
+  async commentTaskAction(
+    { commit }: ActionContext<State, RootState>,
+    payload: any
+  ) {
+    await commentTask(payload.projectId, payload.taskId, payload);
+  },
+  async deleteCommentAction(
+    { commit }: ActionContext<State, RootState>,
+    payload: any
+  ) {
+    await deleteComment(payload.projectId, payload.taskId, payload.commentId);
+  },
+  async updateCommentAction(
+    { commit }: ActionContext<State, RootState>,
+    payload: any
+  ) {
+    await updateComment(payload.projectId, payload.taskId, payload.commentId, payload.comment);
+  },
 };
 
 const mutations = {

@@ -1,48 +1,50 @@
 <template>
-  <transition name="modal-fade">
-    <div class="modal-backdrop">
-      <div
-        class="modal"
-        role="dialog"
-        aria-labelledby="modalTitle"
-        aria-describedby="modalDescription"
-      >
-        <header class="modal-header" id="modalTitle">
-          <slot name="header">
-            <ion-title color="dark">Adding room</ion-title>
-          </slot>
-          <button
-            type="button"
-            class="btn-close"
-            @click="close"
-            aria-label="Close modal"
-          >
-            <ion-icon
-              name="close"
-              class="action-icon"
-              size="large"
-              color="dark"
-            ></ion-icon>
-          </button>
-        </header>
+  <Teleport to="#teleport-target">
+    <transition name="modal-fade">
+      <div class="modal-backdrop">
+        <div
+          class="modal"
+          role="dialog"
+          aria-labelledby="modalTitle"
+          aria-describedby="modalDescription"
+        >
+          <header class="modal-header" id="modalTitle">
+            <slot name="header">
+              <ion-title color="dark">Adding room</ion-title>
+            </slot>
+            <button
+              type="button"
+              class="btn-close"
+              @click="close"
+              aria-label="Close modal"
+            >
+              <ion-icon
+                name="close"
+                class="action-icon"
+                size="large"
+                color="dark"
+              ></ion-icon>
+            </button>
+          </header>
 
-        <section class="modal-body" id="modalDescription">
-          <slot name="body">
-            <ion-item>
-              <ion-label position="floating">Title</ion-label>
-              <ion-input v-model="title"></ion-input>
-            </ion-item>
-          </slot>
-        </section>
+          <section class="modal-body" id="modalDescription">
+            <slot name="body">
+              <ion-item>
+                <ion-label position="floating">Title</ion-label>
+                <ion-input v-model="title"></ion-input>
+              </ion-item>
+            </slot>
+          </section>
 
-        <footer class="modal-footer">
-          <ion-button type="button" color="dark" @click="addRoom"
-            >Create</ion-button
-          >
-        </footer>
+          <footer class="modal-footer">
+            <ion-button type="button" color="dark" @click="addRoom"
+              >Create</ion-button
+            >
+          </footer>
+        </div>
       </div>
-    </div>
-  </transition>
+    </transition>
+  </Teleport>
 </template>
 
 <script lang="ts">
@@ -52,7 +54,7 @@ import {
   IonLabel,
   IonButton,
   IonTitle,
-  IonIcon
+  IonIcon,
 } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
@@ -64,7 +66,7 @@ export default defineComponent({
     IonLabel,
     IonButton,
     IonTitle,
-    IonIcon
+    IonIcon,
   },
   setup(props, { emit }) {
     const store = useStore();
@@ -79,8 +81,8 @@ export default defineComponent({
         await store.dispatch("createRoomAction", {
           projectId: props.projectId,
           room: {
-            title: title.value
-          }
+            title: title.value,
+          },
         });
         await store.dispatch("fetchRooms", { projectId: props.projectId });
         emit("close");
@@ -89,34 +91,13 @@ export default defineComponent({
     return {
       close,
       title,
-      addRoom
+      addRoom,
     };
-  }
+  },
 });
 </script>
 
 <style>
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-}
-
-.modal {
-  background: #ffffff;
-  box-shadow: 2px 2px 20px 1px;
-  overflow-x: auto;
-  display: flex;
-  flex-direction: column;
-}
-
 .modal-header,
 .modal-footer {
   padding: 15px;
@@ -132,12 +113,6 @@ export default defineComponent({
 
 .modal-footer {
   flex-direction: column;
-}
-
-.modal-body {
-  position: relative;
-  padding: 2rem;
-  width: 350px;
 }
 
 .btn-close {

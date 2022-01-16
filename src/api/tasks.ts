@@ -20,4 +20,35 @@ const createTask = (projectId: string, task: any) =>
 const deleteTask = (projectId: string, taskId: string) =>
   httpClient.put(`${PROJECT}/${projectId}/task/${taskId}/delete`);
 
-export { getAllTasks, updateTask, updateTaskStatus, createTask, deleteTask };
+const commentTask = (
+  projectId: string,
+  taskId: string,
+  payload: { authorId: string; text: string }
+) => httpClient.put(`${PROJECT}/${projectId}/task/${taskId}/comment`, payload);
+
+const deleteComment = (projectId: string, taskId: string, commentId: string) =>
+  httpClient.put(
+    `${PROJECT}/${projectId}/task/${taskId}/comment/${commentId}/delete`
+  );
+
+const updateComment = (
+  projectId: string,
+  taskId: string,
+  commentId: string,
+  comment: any
+) =>
+  httpClient.put(
+    `${PROJECT}/${projectId}/task/${taskId}/comment/${commentId}`,
+    comment
+  );
+
+export {
+  getAllTasks,
+  updateTask,
+  updateTaskStatus,
+  createTask,
+  deleteTask,
+  commentTask,
+  deleteComment,
+  updateComment
+};
